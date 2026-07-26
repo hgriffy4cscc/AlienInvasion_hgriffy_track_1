@@ -60,8 +60,9 @@ class Settings:
 
         self.bullet_w_gravity_w = 25
         self.bullet_w_gravity_h = 25
-        self.bullet_w_gravity_speed = 10
         self.bullet_w_gravity_count = 1
+        self.bullet_w_gravity_initial_velocity = 50
+        self.bullet_w_gravity_gravity = 10
         
         self.alien_w = 40
         self.alien_h = 40

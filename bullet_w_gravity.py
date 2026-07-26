@@ -12,6 +12,8 @@ class BulletWithGravity(Sprite):
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()
 
+        self.game = game
+
         self.screen = game.screen
         self.settings = game.settings
 
@@ -23,10 +25,20 @@ class BulletWithGravity(Sprite):
         self.rect = self.image.get_rect()
         self.rect.midbottom = game.ship.rect.midtop
         self.y = float(self.rect.y)
+        self.initial_y = float(self.rect.y)
+
+        self.launch_time = pygame.time.get_ticks()
 
     def update(self):
         """update variables based on game action"""
-        self.y -= self.settings.bullet_w_gravity_speed
+        # gravity = self.settings.bullet_w_gravity_gravity
+        # velocity = self.settings.bullet_w_gravity_initial_velocity
+        gravity = 10
+        velocity = 150
+        t = (pygame.time.get_ticks() - self.launch_time) / 1000
+        motion = (velocity * t) - (gravity * (t ** 2))
+        self.y = self.initial_y - motion
+        print(f"elapsed {t} :: motion: {self.y}")
         self.rect.y = int(self.y)
 
     def draw(self):
