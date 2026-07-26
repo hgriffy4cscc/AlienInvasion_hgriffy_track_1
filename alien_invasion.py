@@ -190,7 +190,7 @@ class AlienInvasion:
             self.ship.moving_left = True
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
-        if event.key == pygame.K_LCTRL and event.key == pygame.K_SPACE:
+        if event.key == pygame.K_c:
             if self.ship.fire('gravitational'):
                 self.laser_sound.play()
                 self.laser_sound.fadeout(250)
