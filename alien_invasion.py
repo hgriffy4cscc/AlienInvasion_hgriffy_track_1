@@ -10,6 +10,8 @@ Resources:
     * course materials (obvi)
     * cannonball image for gravitational ammo from https://pngimg.com/image/108039
         license: attribution non commercial
+    * cannon sound for gravitational ammo from https://pixabay.com/sound-effects/film-special-effects-cannonball-89596/
+        license: free for use
 
 Todo:
     * Add ammo
@@ -78,14 +80,19 @@ class AlienInvasion:
             self.clock.tick(self.settings.FPS)
 
     def initialize_game_entities(self):
+        """initialize game entities"""
         self.ship = Ship(self, Arsenal(self))
         # self.alien_fleet = AlienFleet(self)
         # self.alien_fleet.create_fleet()
 
     def _initialize_game_sounds(self):
+        """prepare stuff to make sounds"""
         pygame.mixer.init()
         self.laser_sound = pygame.mixer.Sound(self.settings.bullet_sound_file)
         self.laser_sound.set_volume(0.7)
+
+        self.cannon_sound = pygame.mixer.Sound(self.settings.bullet_w_gravity_sound_file)
+        self.cannon_sound.set_volume(0.7)
 
         # self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
         # self.impact_sound.set_volume(0.8)
@@ -109,7 +116,7 @@ class AlienInvasion:
     #         # update HUD view
     #         self.HUD.update_level()
 
-    # check bullets viz aliens
+        # check bullets viz aliens
         # collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         # if collisions:
         #     self.impact_sound.play()
@@ -192,8 +199,8 @@ class AlienInvasion:
             self.ship.moving_right = True
         if event.key == pygame.K_c:
             if self.ship.fire('gravitational'):
-                self.laser_sound.play()
-                self.laser_sound.fadeout(250)
+                self.cannon_sound.play()
+                self.cannon_sound.fadeout(1500)
         if event.key == pygame.K_SPACE:
             if self.ship.fire('laser'):
                 self.laser_sound.play()

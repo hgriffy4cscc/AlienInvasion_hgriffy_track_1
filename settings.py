@@ -29,7 +29,7 @@ class Settings:
         self.impact_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
 
         self.bullet_w_gravity_file: Path = self.images_path / 'cannonball_PNG19.png'
-        self.bullet_w_gravity_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+        self.bullet_w_gravity_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'freesound_community-cannonball-89596.mp3'
         self.impact_w_gravity_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
         
         # alien settings
