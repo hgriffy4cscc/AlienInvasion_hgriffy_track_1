@@ -1,5 +1,8 @@
+"""defines a class to control player collection of ammo"""
+
 import pygame
 from bullet import Bullet
+from bullet_w_gravity import BulletWithGravity
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -15,21 +18,30 @@ class Arsenal:
         self.arsenal = pygame.sprite.Group()
     
     def update_arsenal(self):
+        """change game display to account for game actions"""
         self.arsenal.update()
         self._remove_bullets_offscreen()
 
     def _remove_bullets_offscreen(self):
+        """if any bullets have left the screen remove them from play"""
         for bullet in self.arsenal.copy():
             if bullet.rect.bottom <= 0:
                 self.arsenal.remove(bullet)
 
     def draw(self):
+        """represent bullet objects on the screen"""
         for bullet in self.arsenal:
-            bullet.draw_bullet()
+            bullet.draw()
 
-    def fire_bullet(self):
-        if len(self.arsenal) < self.settings.bullet_count:
-            new_bullet = Bullet(self.game)
-            self.arsenal.add(new_bullet)
-            return True
+    def fire_bullet(self, bullet_type):
+        """per player action, launch new bullet"""
+        if len(self.arsenal) < ( self.settings.bullet_count + self.settings.bullet_w_gravity_count ):
+            if bullet_type == 'laser':
+                new_bullet = Bullet(self.game)
+                self.arsenal.add(new_bullet)
+                return True
+            elif bullet_type == 'gravitational':
+                new_bullet = BulletWithGravity(self.game)
+                self.arsenal.add(new_bullet)
+                return True
         return False

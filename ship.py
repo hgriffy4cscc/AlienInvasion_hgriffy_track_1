@@ -1,3 +1,5 @@
+"""Class to define protagonist ship + actions"""
+
 import pygame
 from typing import TYPE_CHECKING
 
@@ -27,15 +29,17 @@ class Ship:
         self.arsenal = arsenal
 
     def _center_ship(self):
+        """return ship to the middle of the screen"""
         self.rect.midbottom = self.boundaries.midbottom
         self.x = float(self.rect.x)
 
     def update(self):
-        #update the position of the ship
+        """update the position of the ship"""
         self._update_ship_movement()
         self.arsenal.update_arsenal()
 
     def _update_ship_movement(self):
+        """calculate position of the ship (for self.update())"""
         temp_speed = self.settings.ship_speed
         if self.moving_left and self.rect.left > self.boundaries.left:
             self.x -= temp_speed
@@ -45,13 +49,16 @@ class Ship:
         self.rect.x = int(self.x)
 
     def draw(self):
+        """implement the representation of the ship onto the screen"""
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
 
-    def fire(self):
-        return self.arsenal.fire_bullet()
+    def fire(self, ammo_type):
+        """trigger the code to fire a bullet"""
+        return self.arsenal.fire_bullet(ammo_type)
     
     def check_collisions(self, other_group):
+        """determine if the ship has collided with another screen element"""
         if pygame.sprite.spritecollideany(self, other_group):
             self._center_ship()
             return True
