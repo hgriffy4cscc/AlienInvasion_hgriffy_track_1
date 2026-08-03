@@ -18,8 +18,10 @@ class BulletWithGravity(Sprite):
         self.settings = game.settings
 
         self.image = pygame.image.load(self.settings.bullet_w_gravity_file)
-        self.image = pygame.transform.scale(self.image,
-            (self.settings.bullet_w_gravity_w,self.settings.bullet_w_gravity_h)
+        self.image = pygame.transform.scale(
+            self.image,
+                (self.settings.bullet_w_gravity_w,
+                 self.settings.bullet_w_gravity_h)
             )
         
         self.rect = self.image.get_rect()
@@ -31,14 +33,12 @@ class BulletWithGravity(Sprite):
 
     def update(self):
         """update variables based on game action"""
-        # gravity = self.settings.bullet_w_gravity_gravity
-        # velocity = self.settings.bullet_w_gravity_initial_velocity
-        gravity = 10
-        velocity = 150
+        gravity = self.settings.bullet_w_gravity_gravity
+        velocity = self.settings.bullet_w_gravity_initial_velocity
         t = (pygame.time.get_ticks() - self.launch_time) / 1000
         motion = (velocity * t) - (gravity * (t ** 2))
         self.y = self.initial_y - motion
-        print(f"elapsed {t} :: motion: {self.y}")
+        print(f"elapsed {t} :: motion: {motion} :: self.y: {self.y}")
         self.rect.y = int(self.y)
 
     def draw(self):

@@ -25,7 +25,7 @@ class Arsenal:
     def _remove_bullets_offscreen(self):
         """if any bullets have left the screen remove them from play"""
         for bullet in self.arsenal.copy():
-            if bullet.rect.bottom <= 0:
+            if bullet.rect.bottom <= 0 or bullet.rect.top >= self.settings.screen_h:
                 self.arsenal.remove(bullet)
 
     def draw(self):
