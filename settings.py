@@ -29,9 +29,9 @@ class Settings:
         self.impact_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
 
         # bullet: cannon
-        self.bullet_w_gravity_file: Path = self.images_path / 'cannonball_PNG19.png'
-        self.bullet_w_gravity_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'freesound_community-cannonball-89596.mp3'
-        self.impact_w_gravity_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
+        self.cannon_file: Path = self.images_path / 'cannonball_PNG19.png'
+        self.cannon_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'freesound_community-cannonball-89596.mp3'
+        self.cannon_impact_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
         
         # alien
         self.alien_file: Path = self.images_path / 'enemy_4.png'
@@ -62,11 +62,11 @@ class Settings:
         self.bullet_count = 5
 
         # bullets: cannon
-        self.bullet_w_gravity_w = 25
-        self.bullet_w_gravity_h = 25
-        self.bullet_w_gravity_count = 1
-        self.bullet_w_gravity_gravity = 100
-        self.bullet_w_gravity_initial_velocity = 600
+        self.cannon_w = 25
+        self.cannon_h = 25
+        self.cannon_count = 1
+        self.cannon_gravity = 100
+        self.cannon_initial_velocity = 600
 
         # aliens
         self.alien_w = 40

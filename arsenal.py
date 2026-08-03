@@ -2,7 +2,7 @@
 
 import pygame
 from bullet import Bullet
-from bullet_w_gravity import BulletWithGravity
+from cannon import BulletWithGravity
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -35,7 +35,7 @@ class Arsenal:
 
     def fire_bullet(self, bullet_type):
         """per player action, launch new bullet"""
-        if len(self.arsenal) < ( self.settings.bullet_count + self.settings.bullet_w_gravity_count ):
+        if len(self.arsenal) < ( self.settings.bullet_count + self.settings.cannon_count ):
             if bullet_type == 'laser':
                 new_bullet = Bullet(self.game)
                 self.arsenal.add(new_bullet)

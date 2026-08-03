@@ -91,7 +91,7 @@ class AlienInvasion:
         self.laser_sound = pygame.mixer.Sound(self.settings.bullet_sound_file)
         self.laser_sound.set_volume(0.7)
 
-        self.cannon_sound = pygame.mixer.Sound(self.settings.bullet_w_gravity_sound_file)
+        self.cannon_sound = pygame.mixer.Sound(self.settings.cannon_sound_file)
         self.cannon_sound.set_volume(0.7)
 
         # self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
