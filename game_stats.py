@@ -27,9 +27,9 @@ class GameStats():
     def __init__(self, game: 'AlienInvasion') -> None:
         self.game = game
         self.settings = game.settings
-        self.score: int
+        self.score: int = 0
+        self.max_score: int = 0
         self.hi_score: int
-        self.max_score: int
         self.init_saved_scores()
         self.reset_stats()
 
@@ -72,16 +72,16 @@ class GameStats():
         # update high_score
         self._update_hi_score()
 
-    def _update_hi_score(self) -> None:
-        """update the all-time highest score"""
-        if self.score > self.hi_score:
-            self.hi_score = self.score
-
     def _update_max_score(self) -> None:
         """update the highest score for this session"""
         if self.score > self.max_score:
             self.max_score = self.score
         # print(f'Max: {self.max_score}')
+
+    def _update_hi_score(self) -> None:
+        """update the all-time highest score"""
+        if self.score > self.hi_score:
+            self.hi_score = self.score
 
     def _update_score(self, collisions) -> None:
         """update score for current game"""

@@ -33,9 +33,9 @@ from arsenal import Arsenal
 from alien_fleet import AlienFleet
 from spectator_crowd import SpectatorCrowd
 # from alien import Alien
-# from button import Button
-# from game_stats import GameStats
-# from hud import HUD
+from button import Button
+from game_stats import GameStats
+from hud import HUD
 
 class AlienInvasion:
     """class to manage the entire game"""
@@ -45,7 +45,7 @@ class AlienInvasion:
         # invoke pygame and set things up
         pygame.init()
         self.settings = Settings()
-        # self.game_stats = GameStats(self)
+        self.game_stats = GameStats(self)
 
         ### build the screen
         self.screen = pygame.display.set_mode(
@@ -56,7 +56,7 @@ class AlienInvasion:
         self.bg = pygame.transform.scale(self.bg,
             (self.settings.screen_w,self.settings.screen_h)
             )
-        # self.HUD = HUD(self)
+        self.HUD = HUD(self)
 
         # set things in motion
         self.running: bool = True
@@ -126,30 +126,41 @@ class AlienInvasion:
                 self.ship.arsenal.laser_arsenal)
         cannon_alien_collisions = self.alien_fleet.check_cannon_collisions(
                 self.ship.arsenal.cannon_arsenal)
-        if laser_alien_collisions or cannon_alien_collisions:
+        if laser_alien_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
-            # self.game_stats.update(collisions)
-            # self.HUD.update_scores()
+            self.game_stats.update(laser_alien_collisions)
+            self.HUD.update_scores()
+        if cannon_alien_collisions:
+            self.impact_sound.play()
+            self.impact_sound.fadeout(500)
+            self.game_stats.update(cannon_alien_collisions)
+            self.HUD.update_scores()
 
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
             self.settings.increase_difficulty()
-            # # update game stats for level
-            # self.game_stats.update_level()
-            # # update HUD view
-            # self.HUD.update_level()
+            # update game stats for level
+            self.game_stats.update_level()
+            # update HUD view
+            self.HUD.update_level()
 
-        # check lasers viz spectators
+        # check lasers + cannon viz spectators
         laser_spectator_collisions = self.spectator_crowd.check_laser_collisions(
                 self.ship.arsenal.laser_arsenal)
         cannon_spectator_collisions = self.spectator_crowd.check_cannon_collisions(
                 self.ship.arsenal.cannon_arsenal)
-        if laser_spectator_collisions or cannon_spectator_collisions:
+        if laser_spectator_collisions:
             self.spectator_sound.play()
             self.spectator_sound.fadeout(500)
-            # self.game_stats.update(collisions)
-            # self.HUD.update_scores()
+            self.game_stats.update(laser_spectator_collisions)
+            self.HUD.update_scores()
+
+        if cannon_spectator_collisions:
+            self.spectator_sound.play()
+            self.spectator_sound.fadeout(500)
+            self.game_stats.update(cannon_alien_collisions)
+            self.HUD.update_scores()
 
         if self.spectator_crowd.check_destroyed_status():
             self.game_active = False
@@ -160,12 +171,12 @@ class AlienInvasion:
 
     def _check_game_status(self) -> None:
         """upon certain collisions, determine if game is over or if a new level should begin"""
-        # if self.game_stats.ships_remaining > 0:
-        #     self.game_stats.ships_remaining -= 1
-        self._reset_level()
-        sleep(0.5)
-        # else:
-        #     self.game_active = False
+        if self.game_stats.ships_remaining > 0:
+            self.game_stats.ships_remaining -= 1
+            self._reset_level()
+            sleep(0.5)
+        else:
+            self.game_active = False
 
     def _reset_level(self) -> None:
         """trigger actions required to start a new level"""
@@ -176,13 +187,13 @@ class AlienInvasion:
 
     def restart_game(self) -> None:
         """trigger actions to start a new game"""
-        # self.settings.initialize_dynamic_settings()
-        # self.game_stats.reset_stats()
-        # self.HUD.update_scores()
-        # self._reset_level()
-        # self.ship._center_ship()
-        # self.game_active = True
-        # pygame.mouse.set_visible(False)
+        self.settings.initialize_dynamic_settings()
+        self.game_stats.reset_stats()
+        self.HUD.update_scores()
+        self._reset_level()
+        self.ship._center_ship()
+        self.game_active = True
+        pygame.mouse.set_visible(False)
 
 
     def _update_screen(self) -> None:
@@ -191,11 +202,11 @@ class AlienInvasion:
         self.ship.draw()
         self.alien_fleet.draw()
         self.spectator_crowd.draw()
-        # self.HUD.draw()
+        self.HUD.draw()
 
-        # if not self.game_active:
-        #     self.play_button.draw()
-        #     pygame.mouse.set_visible(True)
+        if not self.game_active:
+            self.play_button.draw()
+            pygame.mouse.set_visible(True)
         pygame.display.flip()
 
     def _check_events(self) -> None:
@@ -215,9 +226,9 @@ class AlienInvasion:
 
     def _check_button_clicked(self) -> None:
         """process when player clicks the start game button"""
-        # mouse_pos = pygame.mouse.get_pos()
-        # if self.play_button.check_clicked(mouse_pos):
-        #     self.restart_game()
+        mouse_pos = pygame.mouse.get_pos()
+        if self.play_button.check_clicked(mouse_pos):
+            self.restart_game()
 
     def _check_keyup_events(self, event) -> None:
         """process when a key is released"""
