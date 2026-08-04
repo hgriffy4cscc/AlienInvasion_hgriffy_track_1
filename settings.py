@@ -64,6 +64,7 @@ class Settings:
         self.ship_w: int = 40
         self.ship_h: int = 60
         self.starting_ship_count: int = 3
+        self.budget = 1000
 
         # bullet: lasers
         self.bullet_file: Path = self.images_path / 'laserBlast.png'
@@ -84,19 +85,37 @@ class Settings:
         self.spectator_sound_file: Path = self.sound_path / 'freesound_community-homemadeoof-47509.mp3'
         self.spectator_fleet_direction: int = 1
 
-        # button to start game
-        self.button_w: int = 300
-        self.button_h: int = 75
-        self.button_color: tuple[int, int, int] = (0, 135, 50)
-
         # HUD
         self.text_color: tuple[int, int, int] = (255, 255, 255)
-        self.button_font_size: int = 48
         self.HUD_font_size: int = 20
         self.font_file: Path = self.fonts_path / 'Silkscreen' / \
             'Silkscreen-Bold.ttf'
 
         self.initialize_dynamic_settings()
+
+        # button to start game
+        self.play_button_w: int = 300
+        self.play_button_h: int = 75
+        self.play_button_color: tuple[int, int, int] = (0, 135, 50)
+        self.button_font_size: int = 48
+        self.button_msg: str = 'Play'
+
+        # box to display rules before game
+        self.rules_box_w: int = self.screen_w - 200
+        self.rules_box_h: int = self.screen_h - 200
+        self.rules_box_color: tuple[int, int, int] = (0, 0, 0)
+        self.rules_font_size: int = 20
+
+        # the rules (to display at launch)
+        self.the_rules = f'''   Welcome to modified Alien Invasion. Some changes:\n
+            1. In addition to lasers, you can FIRE A CANNONBALL (press c)\n
+            2. In addition to aliens, there are spectators (puppies). DON\'T HURT THEM!\n
+            3. You have a budget for ammo:\n
+               - Lasers cost {self.laser_cost}\n
+               - Cannonballs cost {self.cannon_cost}\n
+            4. Point system:\n
+               - Aliens +{self.alien_points} (increased the lower the aliens get)\n
+               - Spectators: {self.spectator_points}'''
 
     def initialize_dynamic_settings(self) -> None:
         """settings for game elements that may change between levels"""

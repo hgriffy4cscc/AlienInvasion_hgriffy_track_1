@@ -68,8 +68,8 @@ class AlienInvasion:
         # add ship and other game entities
         self.initialize_game_entities()
 
-        # self.play_button = Button(self, 'Play')
-        self.game_active: bool = True
+        self.play_button = Button(self)
+        self.game_active: bool = False
 
         # enable player to pause the aliens to catch up
         self.pause_aliens: bool = False
