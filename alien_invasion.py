@@ -13,6 +13,10 @@ Resources:
     * cannon sound for ammo from
         https://pixabay.com/sound-effects/film-special-effects-cannonball-89596/
         license: free for use
+    * puppy image for spectators from https://pixabay.com/illustrations/dog-png-puppy-bottomless-animal-1113336/
+        license: royalty-free
+    * oof sound for spectators from https://pixabay.com/sound-effects/people-homemadeoof-47509/
+        license: royalty-free
 
 Todo:
     x re-enable alien + alien fleet
@@ -103,6 +107,9 @@ class AlienInvasion:
         self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
         self.impact_sound.set_volume(0.8)
 
+        self.spectator_sound = pygame.mixer.Sound(self.settings.spectator_sound_file)
+        self.spectator_sound.set_volume(0.8)
+
     def _check_game_collisions(self) -> None:
         """determine if any game entities have collided with any others"""
         # check ship collisions viz aliens
@@ -139,8 +146,8 @@ class AlienInvasion:
         cannon_spectator_collisions = self.spectator_crowd.check_cannon_collisions(
                 self.ship.arsenal.cannon_arsenal)
         if laser_spectator_collisions or cannon_spectator_collisions:
-            self.impact_sound.play()
-            self.impact_sound.fadeout(500)
+            self.spectator_sound.play()
+            self.spectator_sound.fadeout(500)
             # self.game_stats.update(collisions)
             # self.HUD.update_scores()
 

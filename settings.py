@@ -80,7 +80,8 @@ class Settings:
         self.alien_fleet_direction: int = 1
 
         # spectator
-        self.spectator_file: Path = self.images_path / 'enemy_4.png'
+        self.spectator_file: Path = self.images_path / 'rosanegra_1-dog-1113336_1920.png'
+        self.spectator_sound_file: Path = self.sound_path / 'freesound_community-homemadeoof-47509.mp3'
         self.spectator_fleet_direction: int = 1
 
         # button to start game
