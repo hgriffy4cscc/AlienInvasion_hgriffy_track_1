@@ -14,9 +14,9 @@ Methods control:
 * 
 """
 
+from typing import TYPE_CHECKING
 import pygame
 from pygame.sprite import Sprite
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -38,7 +38,7 @@ class Cannon(Sprite):
                 (self.settings.cannon_w,
                  self.settings.cannon_h)
             )
-        
+
         self.rect = self.image.get_rect()
         self.rect.midbottom = game.ship.rect.midtop
         self.y: int = self.rect.y

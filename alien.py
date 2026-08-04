@@ -15,9 +15,9 @@ Methods control:
 * motion
 """
 
+from typing import TYPE_CHECKING
 import pygame
 from pygame.sprite import Sprite
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from alien_fleet import AlienFleet
@@ -56,7 +56,7 @@ class Alien(Sprite):
 
     def check_edges(self) -> bool:
         """report if alien within screen boundaries"""
-        return (self.rect.right >= self.boundaries.right 
+        return (self.rect.right >= self.boundaries.right
                 or self.rect.left <= self.boundaries.left)
 
     def draw_alien(self) -> None:

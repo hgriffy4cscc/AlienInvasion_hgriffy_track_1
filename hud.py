@@ -15,8 +15,8 @@ Methods control:
 * 
 """
 
-import pygame.font
 from typing import TYPE_CHECKING
+import pygame.font
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -33,6 +33,17 @@ class HUD:
         self.font = pygame.font.Font(self.settings.font_file,
                                      self.settings.HUD_font_size)
         self.screen_padding = 20
+        # declare variables defined below
+        self.score_str: str
+        self.score_image: pygame.surface.Surface
+        self.score_rect: pygame.rect.Rect
+        self.max_score_str: str
+        self.max_score_image: pygame.surface.Surface
+        self.max_score_rect: pygame.rect.Rect
+        self.hi_score_str: str
+        self.hi_score_image: pygame.surface.Surface
+        self.hi_score_rect: pygame.rect.Rect
+
         self.update_scores()
         self._setup_life_image()
         self.update_level()
@@ -53,7 +64,7 @@ class HUD:
     def _update_score(self) -> None:
         """update score in current game"""
         self.score_str = f'Score: {self.game_stats.score: ,.0f}'
-        self.score_image = self.font.render(self.score_str, True, 
+        self.score_image = self.font.render(self.score_str, True, \
                 self.settings.text_color, None)
         self.score_rect = self.score_image.get_rect()
         self.score_rect.right = self.boundaries.right - self.screen_padding
@@ -62,7 +73,7 @@ class HUD:
     def _update_max_score(self) -> None:
         """update highest score in current session"""
         self.max_score_str = f'Max aScore: {self.game_stats.max_score: ,.0f}'
-        self.max_score_image = self.font.render(self.max_score_str, True, 
+        self.max_score_image = self.font.render(self.max_score_str, True, \
                 self.settings.text_color, None)
         self.max_score_rect = self.max_score_image.get_rect()
         self.max_score_rect.right = self.boundaries.right - self.screen_padding
@@ -71,15 +82,16 @@ class HUD:
     def _update_hi_score(self) -> None:
         """update highest score across all sessions"""
         self.hi_score_str = f'High Score: {self.game_stats.hi_score: ,.0f}'
-        self.hi_score_image = self.font.render(self.hi_score_str, True, 
+        self.hi_score_image = self.font.render(self.hi_score_str, True, \
                 self.settings.text_color, None)
         self.hi_score_rect = self.hi_score_image.get_rect()
-        self.hi_score_rect.midtop = (self.boundaries.centerx, self.boundaries.top + self.screen_padding)
+        self.hi_score_rect.midtop = (self.boundaries.centerx, \
+                                     self.boundaries.top + self.screen_padding)
 
     def update_level(self) -> None:
         """update the number of alien fleets destroyed"""
         self.level_str = f'Level: {self.game_stats.game_level: ,.0f}'
-        self.level_image = self.font.render(self.level_str, True, 
+        self.level_image = self.font.render(self.level_str, True, \
                 self.settings.text_color, None)
         self.level_rect = self.level_image.get_rect()
         self.level_rect.left = self.boundaries.left + self.screen_padding

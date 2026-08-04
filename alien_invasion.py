@@ -10,23 +10,24 @@ Resources:
     * course materials (obvi)
     * cannonball image for ammo from https://pngimg.com/image/108039
         license: attribution non commercial
-    * cannon sound for ammo from https://pixabay.com/sound-effects/film-special-effects-cannonball-89596/
+    * cannon sound for ammo from
+        https://pixabay.com/sound-effects/film-special-effects-cannonball-89596/
         license: free for use
 
 Todo:
-    o re-enable alien + alien fleet
+    x re-enable alien + alien fleet
     o add cost and score data for alien + alien fleet
     o add spectators (~= aliens + cost and score)
 """
 
+from time import sleep
 import sys
 import pygame
-from time import sleep
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
-from alien import Alien
 from alien_fleet import AlienFleet
+# from alien import Alien
 # from button import Button
 # from game_stats import GameStats
 # from hud import HUD
@@ -98,7 +99,7 @@ class AlienInvasion:
 
         self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
         self.impact_sound.set_volume(0.8)
-    
+
     def _check_game_collisions(self) -> None:
         """determine if any game entities have collided with any others"""
         # check ship collisions viz aliens
@@ -109,10 +110,11 @@ class AlienInvasion:
         # check aliens viz bottom of screen
         if self.alien_fleet.check_fleet_bottom():
             self._check_game_status()
-        
+
         # check lasers viz aliens
         laser_collisions = self.alien_fleet.check_laser_collisions(self.ship.arsenal.laser_arsenal)
-        cannon_collisions = self.alien_fleet.check_cannon_collisions(self.ship.arsenal.cannon_arsenal)
+        cannon_collisions = self.alien_fleet.check_cannon_collisions(
+                self.ship.arsenal.cannon_arsenal)
         if laser_collisions or cannon_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
@@ -145,7 +147,6 @@ class AlienInvasion:
 
     def restart_game(self) -> None:
         """trigger actions to start a new game"""
-        pass
         # self.settings.initialize_dynamic_settings()
         # self.game_stats.reset_stats()
         # self.HUD.update_scores()
@@ -184,7 +185,6 @@ class AlienInvasion:
 
     def _check_button_clicked(self) -> None:
         """process when player clicks the start game button"""
-        pass
         # mouse_pos = pygame.mouse.get_pos()
         # if self.play_button.check_clicked(mouse_pos):
         #     self.restart_game()

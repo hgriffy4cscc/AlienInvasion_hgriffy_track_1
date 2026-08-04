@@ -20,13 +20,12 @@ Methods control:
 
 """
 
+from typing import TYPE_CHECKING
 import pygame
 from alien import Alien
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
-    
 
 class AlienFleet:
     """define the collection of Alien Sprites"""
@@ -39,7 +38,7 @@ class AlienFleet:
         self.fleet = pygame.sprite.Group()
         self.alien_fleet_direction: int = game.settings.alien_fleet_direction
         self.alien_fleet_drop_speed: int = game.settings.alien_fleet_drop_speed
-        
+
         self.create_fleet()
 
     ##################################
@@ -61,7 +60,10 @@ class AlienFleet:
 
         self._create_rectangle_fleet(alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset)
 
-    def _create_rectangle_fleet(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset) -> None:
+    def _create_rectangle_fleet(self,
+            alien_w, alien_h,
+                fleet_w, fleet_h,
+                x_offset, y_offset) -> None:
         """generate individual aliens to fill space of the fleet"""
         for row in range(fleet_h):
             current_y = (alien_h * row) + y_offset # determine how far down to place the alien
@@ -85,12 +87,12 @@ class AlienFleet:
 
         fleet_w: int = screen_w // alien_w
         fleet_h: int = (screen_h // 2) // alien_h
-                   
+
         if fleet_w %2 == 0: # if even number of columns, trim 1
             fleet_w -= 1
         else:               # otherwise trim 2
-            fleet_w -+ 2
-        
+            fleet_w -= 2
+
         if fleet_h %2 == 0: # if even number of rows, trim 1
             fleet_h -= 1
         else:               # otherwise trim 2
@@ -146,13 +148,13 @@ class AlienFleet:
         * determine whether alien fleet has collided with a laser
         * remove alien + bullet"""
         return pygame.sprite.groupcollide(other_group, self.fleet, True, True)
-     
+
     def check_cannon_collisions(self, other_group) -> dict:
         """use built-in pygame method to 
         * determine whether alien fleet has collided with a laser
         * remove alien + bullet"""
         return pygame.sprite.groupcollide(other_group, self.fleet, False, True)
-     
+
     def check_destroyed_status(self) -> bool:
         """report whether any aliens remain within the total fleet"""
         return not self.fleet

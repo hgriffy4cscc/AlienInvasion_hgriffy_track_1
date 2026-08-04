@@ -45,7 +45,7 @@ class GameStats():
         else:
             self.hi_score = 0
             self.save_scores()
-        
+
     def save_scores(self) -> None:
         """write non-session scores to file for future retrieval"""
         scores = {
@@ -62,7 +62,7 @@ class GameStats():
         self.ships_remaining = self.settings.starting_ship_count
         self.game_level = 1
         self.score = 0
-    
+
     def update(self, collisions) -> None:
         """based on game events update scores (via sub-functions)"""
         # update score
@@ -85,7 +85,7 @@ class GameStats():
 
     def _update_score(self, collisions) -> None:
         """update score for current game"""
-        for alien in collisions.values():
+        for _ in collisions.values():
             self.score += self.settings.alien_points
         # print(f'Score: {self.score}')
 

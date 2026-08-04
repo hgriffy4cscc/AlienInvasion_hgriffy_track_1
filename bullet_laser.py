@@ -14,9 +14,9 @@ Methods control:
 * 
 """
 
+from typing import TYPE_CHECKING
 import pygame
 from pygame.sprite import Sprite
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -34,7 +34,7 @@ class Laser(Sprite):
         self.image = pygame.transform.scale(self.image,
             (self.settings.laser_w,self.settings.laser_h)
             )
-        
+
         self.rect = self.image.get_rect()
         self.rect.midtop = game.ship.rect.midtop
         self.y: int = self.rect.y

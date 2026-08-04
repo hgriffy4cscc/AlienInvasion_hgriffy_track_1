@@ -50,8 +50,12 @@ class Settings:
         self.screen_w: int = 1200
         self.screen_h: int = 1000
         self.FPS: int = 60
-        self.difficulty_scale = 1.1
+        self.difficulty_scale: float = 1.1
+
+        # define some standard paths (for shorter lines)
         self.images_path: Path = Path.cwd() / 'Assets' / 'images'
+        self.sound_path: Path = Path.cwd() / 'Assets' / 'sound'
+        self.fonts_path: Path = Path.cwd() / 'Assets' / 'Fonts'
         self.bg_file: Path = self.images_path / 'webb_butterfly_lg.jpg'
         self.scores_file: Path = Path.cwd() / 'Assets' / 'file' / 'scores.json'
 
@@ -63,14 +67,14 @@ class Settings:
 
         # bullet: lasers
         self.bullet_file: Path = self.images_path / 'laserBlast.png'
-        self.bullet_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
-        self.impact_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
+        self.bullet_sound_file: Path = self.sound_path / 'laser.mp3'
+        self.impact_sound_file: Path = self.sound_path / 'impactSound.mp3'
 
         # bullet: cannon
         self.cannon_file: Path = self.images_path / 'cannonball_PNG19.png'
-        self.cannon_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'freesound_community-cannonball-89596.mp3'
-        self.cannon_impact_sound_file: Path = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
-        
+        self.cannon_sound_file: Path = self.sound_path / 'freesound_community-cannonball-89596.mp3'
+        self.cannon_impact_sound_file: Path = self.sound_path / 'impactSound.mp3'
+
         # alien
         self.alien_file: Path = self.images_path / 'enemy_4.png'
         self.alien_fleet_direction: int = 1
@@ -84,7 +88,8 @@ class Settings:
         self.text_color: tuple[int, int, int] = (255, 255, 255)
         self.button_font_size: int = 48
         self.HUD_font_size: int = 20
-        self.font_file: Path = Path.cwd() / 'Assets' / 'Fonts' / 'Silkscreen' / 'Silkscreen-Bold.ttf'
+        self.font_file: Path = self.fonts_path / 'Silkscreen' / \
+            'Silkscreen-Bold.ttf'
 
         self.initialize_dynamic_settings()
 
@@ -116,6 +121,7 @@ class Settings:
         self.alien_points: int = 50
 
     def increase_difficulty(self) -> None:
+        """when player completes a round, make game more difficult"""
         self.ship_speed *= round(self.difficulty_scale)
         self.laser_speed *= round(self.difficulty_scale)
         self.alien_fleet_speed *= round(self.difficulty_scale)

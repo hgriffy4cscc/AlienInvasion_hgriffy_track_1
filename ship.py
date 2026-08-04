@@ -14,17 +14,16 @@ Methods control:
 * 
 """
 
-import pygame
-from pygame.sprite import Sprite
 from typing import TYPE_CHECKING
+import pygame
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
     from arsenal import Arsenal
 
-class Ship(Sprite):
+class Ship():
     """Sprite to represent the ship/playable character"""
-    
+
     def __init__(self, game: 'AlienInvasion', arsenal: 'Arsenal') -> None:
         self.game: AlienInvasion = game
         self.settings = game.settings
@@ -35,11 +34,11 @@ class Ship(Sprite):
         self.image = pygame.transform.scale(self.image,
             (self.settings.ship_w,self.settings.ship_h)
             )
-        
+
         self.rect = self.image.get_rect()
         self.x: int
         self._center_ship()
-        
+
         self.moving_left: bool = False
         self.moving_right: bool = False
 
@@ -72,7 +71,7 @@ class Ship(Sprite):
     def fire(self, ammo_type) -> bool:
         """trigger the code to fire a bullet"""
         return self.arsenal.fire_bullet(ammo_type)
-    
+
     def check_collisions(self, other_group) -> bool:
         """determine if the ship has collided with another screen element (ie alien)"""
         if pygame.sprite.spritecollideany(self, other_group):

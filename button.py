@@ -13,8 +13,8 @@ Properties contain:
 Methods control:
 * 
 """
-import pygame.font
 from typing import TYPE_CHECKING
+import pygame.font
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -27,7 +27,7 @@ class Button():
         self.screen = game.screen
         self.boundaries = game.screen.get_rect()
         self.settings = game.settings
-        
+
         self.font = pygame.font.Font(self.settings.font_file, self.settings.button_font_size)
         self.rect = pygame.Rect(0,0, self.settings.button_w, self.settings.button_h)
         self.rect.center = self.boundaries.center
@@ -43,7 +43,7 @@ class Button():
         """put the button object on the screen"""
         self.screen.fill(self.settings.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
-    
+
     def check_clicked(self, mouse_pos) -> bool:
         """determine if user has clicked button"""
         return self.rect.collidepoint(mouse_pos)

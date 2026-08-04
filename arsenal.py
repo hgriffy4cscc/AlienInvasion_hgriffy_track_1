@@ -19,10 +19,10 @@ Methods control:
 * "firing" cannon
 """
 
+from typing import TYPE_CHECKING
 import pygame
 from bullet_laser import Laser
 from bullet_cannon import Cannon
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -39,7 +39,7 @@ class Arsenal:
         self.cannon_arsenal = pygame.sprite.Group()
         # group arsenals for easier bulk processing
         self.all_arsenals: list = [self.laser_arsenal, self.cannon_arsenal]
-    
+
     def update_arsenals(self) -> None:
         """change game display to account for game actions"""
         for arsenal in self.all_arsenals:
@@ -53,7 +53,7 @@ class Arsenal:
                 if bullet.rect.bottom <= 0 or bullet.rect.top >= self.settings.screen_h \
                     or bullet.rect.right <= 0 or bullet.rect.left >= self.settings.screen_w:
                     arsenal.remove(bullet)
-  
+
     def draw(self) -> None:
         """represent bullet objects on the screen"""
         for arsenal in self.all_arsenals:
