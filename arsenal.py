@@ -1,8 +1,27 @@
-"""defines a class to control player collection of ammo"""
+"""defines a class to control player collection of ammo
+Depends on:
+* settings.py
+* bullet_cannon.py
+* bullet_laser.py
+
+Is Depended on:
+* arsenal.py
+* ship.py
+
+Properties contain:
+* list of lasers fired
+* list of cannon fired
+
+Methods control:
+* drawing on screen
+* removing any that have left screen
+* "firing" lasers
+* "firing" cannon
+"""
 
 import pygame
-from bullet import Bullet
-from cannon import CannonBullet
+from bullet_laser import Laser
+from bullet_cannon import Cannon
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -18,7 +37,7 @@ class Arsenal:
         self.laser_arsenal = pygame.sprite.Group()
         self.cannon_arsenal = pygame.sprite.Group()
         # group arsenals for easier bulk processing
-        self.all_arsenals = [self.laser_arsenal, self.cannon_arsenal]
+        self.all_arsenals: list = [self.laser_arsenal, self.cannon_arsenal]
     
     def update_arsenals(self):
         """change game display to account for game actions"""
@@ -43,13 +62,13 @@ class Arsenal:
     def fire_bullet(self, bullet_type):
         """per player action, launch new bullet"""
         if bullet_type == 'laser':
-            if len(self.laser_arsenal) < (self.settings.laser_count):
-                new_bullet = Bullet(self.game)
+            if len(self.laser_arsenal) < (self.settings.laser_arsenal_max):
+                new_bullet = Laser(self.game)
                 self.laser_arsenal.add(new_bullet)
                 return True
         elif bullet_type == 'cannon':
             if len(self.cannon_arsenal) < ( self.settings.cannon_arsenal_max ):
-                new_bullet = CannonBullet(self.game)
+                new_bullet = Cannon(self.game)
                 self.cannon_arsenal.add(new_bullet)
                 return True
         return False

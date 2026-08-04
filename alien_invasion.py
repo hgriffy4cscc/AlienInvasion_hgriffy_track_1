@@ -52,7 +52,7 @@ class AlienInvasion:
         # self.HUD = HUD(self)
 
         # set things in motion
-        self.running = True
+        self.running: bool = True
         self.clock = pygame.time.Clock()
 
         # add some sounds
@@ -62,10 +62,10 @@ class AlienInvasion:
         self.initialize_game_entities()
 
         # self.play_button = Button(self, 'Play')
-        self.game_active = True
+        self.game_active: bool = True
 
         # enable player to pause the aliens to catch up
-        self.pause_aliens = False
+        self.pause_aliens: bool = False
 
     def run_game(self):
         """core method to coordinate the game -- called from top level of the program"""
@@ -76,7 +76,7 @@ class AlienInvasion:
                 self.ship.update()
                 if not self.pause_aliens:
                     self.alien_fleet.update_fleet()
-                self._check_collisions()
+                self._check_game_collisions()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
@@ -98,7 +98,7 @@ class AlienInvasion:
         self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
         self.impact_sound.set_volume(0.8)
     
-    def _check_collisions(self):
+    def _check_game_collisions(self):
         """determine if any game entities have collided with any others"""
         # check ship collisions viz aliens
         if self.ship.check_collisions( self.alien_fleet.fleet):

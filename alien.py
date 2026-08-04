@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 class Alien(Sprite):
 
-    def __init__(self, fleet: 'AlienFleet', x: float, y: float) -> None:
+    def __init__(self, fleet: 'AlienFleet', x: int, y: int) -> None:
         super().__init__()
 
         # connect alien to game environment
@@ -43,21 +43,20 @@ class Alien(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.x = float(self.rect.x)
-        self.y = float(self.rect.y)
+        self.x: int = self.rect.x
+        self.y: int = self.rect.y
 
     def update(self):
         """per clock, update location"""
-        temp_speed = self.settings.alien_fleet_speed
+        temp_speed: int = self.settings.alien_fleet_speed
         self.x += temp_speed * self.fleet.alien_fleet_direction
         self.rect.x = self.x
         self.rect.y = self.y
 
     def check_edges(self)->bool:
-        # keep alien within screen boundaries
+        """report if alien within screen boundaries"""
         return (self.rect.right >= self.boundaries.right 
-                or self.rect.left <= self.boundaries.left
-                )
+                or self.rect.left <= self.boundaries.left)
 
     def draw_alien(self):
         """represent alien on the screen"""

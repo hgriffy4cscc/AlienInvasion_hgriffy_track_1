@@ -1,3 +1,18 @@
+"""create button to begin the game
+Depends on:
+* settings.py
+* 
+
+Is Depended on:
+* alien_invasion.py
+* 
+
+Properties contain:
+* 
+
+Methods control:
+* 
+"""
 import pygame.font
 from typing import TYPE_CHECKING
 
@@ -7,7 +22,7 @@ if TYPE_CHECKING:
 class Button():
 
     def __init__(self, game: 'AlienInvasion', msg) -> None:
-        self.game = game
+        self.game: AlienInvasion = game
         self.screen = game.screen
         self.boundaries = game.screen.get_rect()
         self.settings = game.settings
@@ -18,13 +33,16 @@ class Button():
         self._prep_msg(msg)
 
     def _prep_msg(self, msg):
+        """convert text to pygame display object"""
         self.msg_image = self.font.render(msg, True, self.settings.text_color, None)
         self.msg_image_rect = self.msg_image.get_rect()
         self.msg_image_rect.center = self.rect.center
 
     def draw(self):
+        """put the button object on the screen"""
         self.screen.fill(self.settings.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
     
     def check_clicked(self, mouse_pos):
+        """determine if user has clicked button"""
         return self.rect.collidepoint(mouse_pos)

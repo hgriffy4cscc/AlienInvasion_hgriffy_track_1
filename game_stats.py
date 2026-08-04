@@ -1,3 +1,18 @@
+"""keep track of scores and components thereof
+Depends on:
+* settings.py
+* 
+
+Is Depended on:
+* alien_invasion.py
+* 
+
+Properties contain:
+* 
+
+Methods control:
+* 
+"""
 from pathlib import Path
 import json
 
@@ -11,15 +26,17 @@ class GameStats():
     def __init__(self, game: 'AlienInvasion') -> None:
         self.game = game
         self.settings = game.settings
+        self.score: int
+        self.hi_score: int
+        self.max_score: int
         self.init_saved_scores()
         self.reset_stats()
-        self.max_score = 0
-
 
     def init_saved_scores(self):
-        self.path = self.settings.scores_file
+        """update score values from saved file (if saved)"""
+        self.path: Path = self.settings.scores_file
         if self.path.exists():
-            contents = self.path.read_text()
+            contents: str = self.path.read_text()
             if not contents:
                 contents = '{}'
             scores = json.loads(contents)
@@ -29,6 +46,7 @@ class GameStats():
             self.save_scores()
         
     def save_scores(self):
+        """write non-session scores to file for future retrieval"""
         scores = {
             'hi_score': self.hi_score
         }
@@ -39,11 +57,13 @@ class GameStats():
             print(f'File Not Found: {e.filename2}')
 
     def reset_stats(self):
+        """when game restarted (not launched) reset scores"""
         self.ships_remaining = self.settings.starting_ship_count
         self.game_level = 1
         self.score = 0
     
     def update(self, collisions):
+        """based on game events update scores (via sub-functions)"""
         # update score
         self._update_score(collisions)
         # update max_score
@@ -51,20 +71,24 @@ class GameStats():
         # update high_score
         self._update_hi_score()
 
+    def _update_hi_score(self):
+        """update the all-time highest score"""
+        if self.score > self.hi_score:
+            self.hi_score = self.score
+
     def _update_max_score(self):
+        """update the highest score for this session"""
         if self.score > self.max_score:
             self.max_score = self.score
         # print(f'Max: {self.max_score}')
 
-    def _update_hi_score(self):
-        if self.score > self.hi_score:
-            self.hi_score = self.score
-
     def _update_score(self, collisions):
+        """update score for current game"""
         for alien in collisions.values():
             self.score += self.settings.alien_points
         # print(f'Score: {self.score}')
 
     def update_level(self):
+        """when level completed update"""
         self.game_level += 1
         print(f'Level: {self.game_level}')

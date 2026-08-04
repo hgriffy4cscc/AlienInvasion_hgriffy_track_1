@@ -1,4 +1,18 @@
-"""class to define and control a laser style bullet"""
+"""class to define and control a laser style bullet
+Depends on:
+* settings.py
+* 
+
+Is Depended on:
+* alien_invasion.py
+* 
+
+Properties contain:
+* 
+
+Methods control:
+* 
+"""
 
 import pygame
 from pygame.sprite import Sprite
@@ -7,7 +21,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
-class Bullet(Sprite):
+class Laser(Sprite):
 
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()
@@ -22,7 +36,7 @@ class Bullet(Sprite):
         
         self.rect = self.image.get_rect()
         self.rect.midtop = game.ship.rect.midtop
-        self.y = float(self.rect.y)
+        self.y: int = self.rect.y
 
     def update(self):
         """modify variables based on game action"""
