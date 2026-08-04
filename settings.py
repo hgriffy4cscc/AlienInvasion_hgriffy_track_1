@@ -114,8 +114,8 @@ class Settings:
         self.cannon_initial_velocity: int = 550
 
         # aliens
-        self.alien_w: int = 40
-        self.alien_h: int = 40
+        self.alien_w: int = 60
+        self.alien_h: int = 60
         self.alien_fleet_speed: int = 3
         self.alien_fleet_drop_speed: int = 20
         self.alien_points: int = 50
