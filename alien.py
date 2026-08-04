@@ -46,18 +46,18 @@ class Alien(Sprite):
         self.x: int = self.rect.x
         self.y: int = self.rect.y
 
-    def update(self):
+    def update(self) -> None:
         """per clock, update location"""
         temp_speed: int = self.settings.alien_fleet_speed
         self.x += temp_speed * self.fleet.alien_fleet_direction
         self.rect.x = self.x
         self.rect.y = self.y
 
-    def check_edges(self)->bool:
+    def check_edges(self) -> bool:
         """report if alien within screen boundaries"""
         return (self.rect.right >= self.boundaries.right 
                 or self.rect.left <= self.boundaries.left)
 
-    def draw_alien(self):
+    def draw_alien(self) -> None:
         """represent alien on the screen"""
         self.screen.blit(self.image, self.rect)

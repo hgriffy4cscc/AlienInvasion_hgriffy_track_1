@@ -49,7 +49,7 @@ class Cannon(Sprite):
         self.launch_time: int = pygame.time.get_ticks()
 
 
-    def _discern_horizontal_motion(self):
+    def _discern_horizontal_motion(self) -> None:
         if self.game.ship.moving_left:
             self.motion_h = -self.settings.ship_speed // 2
         elif self.game.ship.moving_right:
@@ -57,7 +57,7 @@ class Cannon(Sprite):
         else:
             self.motion_h = 0
 
-    def update(self):
+    def update(self) -> None:
         """update variables based on game action"""
         gravity: int = self.settings.cannon_gravity
         velocity: int = self.settings.cannon_initial_velocity
@@ -69,6 +69,6 @@ class Cannon(Sprite):
             self.x += self.motion_h
             self.rect.x = int(self.x)
 
-    def draw(self):
+    def draw(self) -> None:
         """actually represent the bullet on the screen"""
         self.screen.blit(self.image, self.rect)

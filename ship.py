@@ -45,17 +45,17 @@ class Ship(Sprite):
 
         self.arsenal: Arsenal = arsenal
 
-    def _center_ship(self):
+    def _center_ship(self) -> None:
         """return ship to the middle of the screen"""
         self.rect.midbottom = self.boundaries.midbottom
         self.x = self.rect.x
 
-    def update(self):
+    def update(self) -> None:
         """update the position of the ship"""
         self._update_ship_movement()
         self.arsenal.update_arsenals()
 
-    def _update_ship_movement(self):
+    def _update_ship_movement(self) -> None:
         """calculate position of the ship (for self.update())"""
         temp_speed: int = self.settings.ship_speed
         if self.moving_left and self.rect.left > self.boundaries.left:
@@ -64,16 +64,16 @@ class Ship(Sprite):
             self.x += temp_speed
         self.rect.x = self.x
 
-    def draw(self):
+    def draw(self) -> None:
         """implement the representation of the ship onto the screen"""
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
 
-    def fire(self, ammo_type):
+    def fire(self, ammo_type) -> bool:
         """trigger the code to fire a bullet"""
         return self.arsenal.fire_bullet(ammo_type)
     
-    def check_collisions(self, other_group):
+    def check_collisions(self, other_group) -> bool:
         """determine if the ship has collided with another screen element (ie alien)"""
         if pygame.sprite.spritecollideany(self, other_group):
             self._center_ship()

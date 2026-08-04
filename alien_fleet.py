@@ -43,7 +43,7 @@ class AlienFleet:
 
     ##################################
     ### PREPARE AND POSITION FLEET ###
-    def create_fleet(self):
+    def create_fleet(self) -> None:
         """determine initial dimensions of fleet within game boundaries"""
         alien_w: int = self.settings.alien_w
         alien_h: int = self.settings.alien_h
@@ -60,7 +60,7 @@ class AlienFleet:
 
         self._create_rectangle_fleet(alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset)
 
-    def _create_rectangle_fleet(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset):
+    def _create_rectangle_fleet(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset) -> None:
         """generate individual aliens to fill space of the fleet"""
         for row in range(fleet_h):
             current_y = (alien_h * row) + y_offset # determine how far down to place the alien
@@ -70,7 +70,7 @@ class AlienFleet:
                     continue
                 self._create_alien(current_x, current_y)
 
-    def calculate_offsets(self, alien_w, alien_h, screen_w, fleet_w, fleet_h):
+    def calculate_offsets(self, alien_w, alien_h, screen_w, fleet_w, fleet_h) -> tuple[int, int]:
         """determine positioning of and space between aliens within fleet"""
         half_screen: int = self.settings.screen_h // 2
         fleet_horizontal_space: int = alien_w * fleet_w
@@ -79,7 +79,7 @@ class AlienFleet:
         y_offset: int = (half_screen - fleet_vertical_space)//2
         return x_offset, y_offset
 
-    def calculate_fleet_dimensions(self, alien_w, screen_w, alien_h, screen_h):
+    def calculate_fleet_dimensions(self, alien_w, screen_w, alien_h, screen_h) -> tuple[int, int]:
         """determine area to be occupied by fleet as a whole"""
 
         fleet_w: int = screen_w // alien_w
@@ -97,7 +97,7 @@ class AlienFleet:
 
         return fleet_w, fleet_h
 
-    def _create_alien(self, current_x: int, current_y: int):
+    def _create_alien(self, current_x: int, current_y: int) -> None:
         """add an individual alien to the fleet at specific position"""
         new_alien: Alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
@@ -105,18 +105,18 @@ class AlienFleet:
     #################
     ### GAME PLAY ###
     ### REPRESENT FLEET ON THE SCREEN ###
-    def update_fleet(self):
+    def update_fleet(self) -> None:
         """per clock, update motion/position for entire fleet"""
         self._reverse_fleet_at_screen_edge()
         self.fleet.update()
 
-    def draw(self):
+    def draw(self) -> None:
         """per clock, update motion/position for each alien"""
         alien: 'Alien'
         for alien in self.fleet:
             alien.draw_alien()
 
-    def _reverse_fleet_at_screen_edge(self):
+    def _reverse_fleet_at_screen_edge(self) -> None:
         """determine if fleet has reached side edge of game screen + reverse if so"""
         alien: Alien
         for alien in self.fleet:
@@ -125,7 +125,7 @@ class AlienFleet:
                 self._drop_alien_fleet()
                 break
 
-    def check_fleet_bottom(self):
+    def check_fleet_bottom(self) -> bool:
         """determine + report if fleet has reached bottom of game space"""
         alien: Alien
         for alien in self.fleet:
@@ -133,25 +133,25 @@ class AlienFleet:
                 return True
         return False
 
-    def _drop_alien_fleet(self):
+    def _drop_alien_fleet(self) -> None:
         """move fleet down when it has reached screen side edge"""
         alien: Alien
         for alien in self.fleet:
             alien.y += self.settings.alien_fleet_drop_speed
 
     ### CHECK IF FLEET HAS HIT AMMO OR SHIP
-    def check_laser_collisions(self, other_group):
+    def check_laser_collisions(self, other_group) -> dict:
         """use built-in pygame method to 
         * determine whether alien fleet has collided with a laser
         * remove alien + bullet"""
         return pygame.sprite.groupcollide(other_group, self.fleet, True, True)
      
-    def check_cannon_collisions(self, other_group):
+    def check_cannon_collisions(self, other_group) -> dict:
         """use built-in pygame method to 
         * determine whether alien fleet has collided with a laser
         * remove alien + bullet"""
         return pygame.sprite.groupcollide(other_group, self.fleet, False, True)
      
-    def check_destroyed_status(self):
+    def check_destroyed_status(self) -> bool:
         """report whether any aliens remain within the total fleet"""
         return not self.fleet

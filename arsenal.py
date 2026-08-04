@@ -39,13 +39,13 @@ class Arsenal:
         # group arsenals for easier bulk processing
         self.all_arsenals: list = [self.laser_arsenal, self.cannon_arsenal]
     
-    def update_arsenals(self):
+    def update_arsenals(self) -> None:
         """change game display to account for game actions"""
         for arsenal in self.all_arsenals:
             arsenal.update()
             self._remove_bullets_offscreen()
 
-    def _remove_bullets_offscreen(self):
+    def _remove_bullets_offscreen(self) -> None:
         """if any bullets have left the screen remove them from play"""
         for arsenal in self.all_arsenals:
             for bullet in arsenal.copy():
@@ -53,13 +53,13 @@ class Arsenal:
                     or bullet.rect.right <= 0 or bullet.rect.left >= self.settings.screen_w:
                     arsenal.remove(bullet)
   
-    def draw(self):
+    def draw(self) -> None:
         """represent bullet objects on the screen"""
         for arsenal in self.all_arsenals:
             for bullet in arsenal:
                 bullet.draw()
 
-    def fire_bullet(self, bullet_type):
+    def fire_bullet(self, bullet_type) -> bool:
         """per player action, launch new bullet"""
         if bullet_type == 'laser':
             if len(self.laser_arsenal) < (self.settings.laser_arsenal_max):

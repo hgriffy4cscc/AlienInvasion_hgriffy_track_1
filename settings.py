@@ -88,7 +88,7 @@ class Settings:
 
         self.initialize_dynamic_settings()
 
-    def initialize_dynamic_settings(self):
+    def initialize_dynamic_settings(self) -> None:
         """settings for game elements that may change between levels"""
         # ship
         self.ship_speed: int = 5
@@ -115,7 +115,7 @@ class Settings:
         self.alien_fleet_drop_speed: int = 20
         self.alien_points: int = 50
 
-    def increase_difficulty(self):
+    def increase_difficulty(self) -> None:
         self.ship_speed *= round(self.difficulty_scale)
         self.laser_speed *= round(self.difficulty_scale)
         self.alien_fleet_speed *= round(self.difficulty_scale)

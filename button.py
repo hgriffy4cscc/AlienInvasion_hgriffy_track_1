@@ -32,17 +32,17 @@ class Button():
         self.rect.center = self.boundaries.center
         self._prep_msg(msg)
 
-    def _prep_msg(self, msg):
+    def _prep_msg(self, msg) -> None:
         """convert text to pygame display object"""
         self.msg_image = self.font.render(msg, True, self.settings.text_color, None)
         self.msg_image_rect = self.msg_image.get_rect()
         self.msg_image_rect.center = self.rect.center
 
-    def draw(self):
+    def draw(self) -> None:
         """put the button object on the screen"""
         self.screen.fill(self.settings.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
     
-    def check_clicked(self, mouse_pos):
+    def check_clicked(self, mouse_pos) -> bool:
         """determine if user has clicked button"""
         return self.rect.collidepoint(mouse_pos)

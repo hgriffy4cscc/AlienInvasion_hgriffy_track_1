@@ -67,7 +67,7 @@ class AlienInvasion:
         # enable player to pause the aliens to catch up
         self.pause_aliens: bool = False
 
-    def run_game(self):
+    def run_game(self) -> None:
         """core method to coordinate the game -- called from top level of the program"""
         # Game Loop
         while self.running:
@@ -80,13 +80,13 @@ class AlienInvasion:
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
-    def initialize_game_entities(self):
+    def initialize_game_entities(self) -> None:
         """initialize game entities"""
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
 
-    def _initialize_game_sounds(self):
+    def _initialize_game_sounds(self) -> None:
         """prepare stuff to make sounds"""
         pygame.mixer.init()
         self.laser_sound = pygame.mixer.Sound(self.settings.bullet_sound_file)
@@ -98,7 +98,7 @@ class AlienInvasion:
         self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
         self.impact_sound.set_volume(0.8)
     
-    def _check_game_collisions(self):
+    def _check_game_collisions(self) -> None:
         """determine if any game entities have collided with any others"""
         # check ship collisions viz aliens
         if self.ship.check_collisions( self.alien_fleet.fleet):
@@ -126,7 +126,7 @@ class AlienInvasion:
             # # update HUD view
             # self.HUD.update_level()
 
-    def _check_game_status(self):
+    def _check_game_status(self) -> None:
         """upon certain collisions, determine if game is over or if a new level should begin"""
         # if self.game_stats.ships_remaining > 0:
         #     self.game_stats.ships_remaining -= 1
@@ -135,14 +135,14 @@ class AlienInvasion:
         # else:
         #     self.game_active = False
 
-    def _reset_level(self):
+    def _reset_level(self) -> None:
         """trigger actions required to start a new level"""
         for arsenal in self.ship.arsenal.all_arsenals:
             arsenal.remove()
         self.alien_fleet.fleet.empty()
         self.alien_fleet.create_fleet()
 
-    def restart_game(self):
+    def restart_game(self) -> None:
         """trigger actions to start a new game"""
         pass
         # self.settings.initialize_dynamic_settings()
@@ -154,7 +154,7 @@ class AlienInvasion:
         # pygame.mouse.set_visible(False)
 
 
-    def _update_screen(self):
+    def _update_screen(self) -> None:
         """implement steps to redraw the various game entities and make changes visible"""
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
@@ -166,7 +166,7 @@ class AlienInvasion:
         #     pygame.mouse.set_visible(True)
         pygame.display.flip()
 
-    def _check_events(self):
+    def _check_events(self) -> None:
         """monitor player input and respond accordingly"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -181,19 +181,22 @@ class AlienInvasion:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self._check_button_clicked()
 
-    def _check_button_clicked(self):
+    def _check_button_clicked(self) -> None:
+        """process when player clicks the start game button"""
         pass
         # mouse_pos = pygame.mouse.get_pos()
         # if self.play_button.check_clicked(mouse_pos):
         #     self.restart_game()
 
-    def _check_keyup_events(self, event):
+    def _check_keyup_events(self, event) -> None:
+        """process when a key is released"""
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = False
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
 
-    def _check_keydown_events(self, event):
+    def _check_keydown_events(self, event) -> None:
+        """process when a key is pressed"""
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         if event.key == pygame.K_RIGHT:
@@ -218,5 +221,6 @@ class AlienInvasion:
                 self.pause_aliens = True
 
 if __name__ == '__main__':
+    """start the whole thing running"""
     ai = AlienInvasion()
     ai.run_game()
