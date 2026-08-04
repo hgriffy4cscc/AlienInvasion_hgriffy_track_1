@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from alien_fleet import AlienFleet
 
 class Alien(Sprite):
+    """define individual alien Sprites"""
 
     def __init__(self, fleet: 'AlienFleet', x: int, y: int) -> None:
         super().__init__()

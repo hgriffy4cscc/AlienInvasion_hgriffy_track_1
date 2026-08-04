@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Laser(Sprite):
+    """manage laser-style ammunition Sprite"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()
@@ -38,11 +39,11 @@ class Laser(Sprite):
         self.rect.midtop = game.ship.rect.midtop
         self.y: int = self.rect.y
 
-    def update(self):
+    def update(self) -> None:
         """modify variables based on game action"""
         self.y -= self.settings.laser_speed
         self.rect.y = int(self.y)
 
-    def draw(self):
+    def draw(self) -> None:
         """actually put the bullet on the screen"""
         self.screen.blit(self.image, self.rect)

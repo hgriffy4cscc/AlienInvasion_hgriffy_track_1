@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class GameStats():
+    """manage scores and other statistics about gameplay"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         self.game = game

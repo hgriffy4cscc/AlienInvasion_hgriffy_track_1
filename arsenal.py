@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Arsenal:
+    """class that holds bullets (Laser and Cannon)"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         self.game = game

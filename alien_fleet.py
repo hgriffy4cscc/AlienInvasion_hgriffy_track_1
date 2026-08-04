@@ -29,6 +29,7 @@ if TYPE_CHECKING:
     
 
 class AlienFleet:
+    """define the collection of Alien Sprites"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
 

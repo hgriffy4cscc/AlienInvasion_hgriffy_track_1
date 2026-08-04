@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Button():
+    """create and manage button to begin the game"""
 
     def __init__(self, game: 'AlienInvasion', msg) -> None:
         self.game: AlienInvasion = game

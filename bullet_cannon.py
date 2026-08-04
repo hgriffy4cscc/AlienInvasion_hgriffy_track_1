@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Cannon(Sprite):
+    """manage a cannon-style ammunition Sprite"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()

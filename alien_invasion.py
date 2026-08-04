@@ -32,6 +32,7 @@ from alien_fleet import AlienFleet
 # from hud import HUD
 
 class AlienInvasion:
+    """class to manage the entire game"""
 
     def __init__(self) -> None:
 
