@@ -106,7 +106,7 @@ class Settings:
         self.cannon_arsenal_max: int = 1
         self.cannon_cost: int = 40
         self.cannon_gravity: int = 100
-        self.cannon_initial_velocity: int = 600
+        self.cannon_initial_velocity: int = 550
 
         # aliens
         self.alien_w: int = 40
