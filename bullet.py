@@ -17,7 +17,7 @@ class Bullet(Sprite):
 
         self.image = pygame.image.load(self.settings.bullet_file)
         self.image = pygame.transform.scale(self.image,
-            (self.settings.bullet_w,self.settings.bullet_h)
+            (self.settings.laser_w,self.settings.laser_h)
             )
         
         self.rect = self.image.get_rect()
@@ -26,7 +26,7 @@ class Bullet(Sprite):
 
     def update(self):
         """modify variables based on game action"""
-        self.y -= self.settings.bullet_speed
+        self.y -= self.settings.laser_speed
         self.rect.y = int(self.y)
 
     def draw(self):

@@ -137,10 +137,12 @@ class AlienFleet:
             alien.draw_alien()
 
     ### CHECK IF FLEET HAS HIT AMMO OR SHIP
-    def check_collisions(self, other_group):
-        """report whether alien fleet has collided with a bullet or the main ship"""
-        return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
-    
+    def check_laser_collisions(self, other_group):
+        """use built-in pygame method to 
+        * determine whether alien fleet has collided with a laser
+        * remove alien + bullet"""
+        return pygame.sprite.groupcollide(other_group, self.fleet, True, True)
+     
     def check_destroyed_status(self):
         """report whether any aliens remain within the total fleet"""
         return not self.fleet

@@ -8,7 +8,7 @@ class Settings:
     def __init__(self) -> None:
 
         # game screen and environment
-        self.name: str = "Track 1: Alien Invasion w Gravitational Ammo + Allies"
+        self.name: str = "Track 1: Alien Invasion w Cannon Ammo + Spectators"
         self.screen_w: int = 1200
         self.screen_h: int = 1000
         self.FPS: int = 60
@@ -56,15 +56,15 @@ class Settings:
         self.ship_speed: int = 5
 
         # bullets: lasers
-        self.bullet_w = 25
-        self.bullet_h = 80
-        self.bullet_speed = 7
-        self.bullet_count = 5
+        self.laser_w = 25
+        self.laser_h = 80
+        self.laser_speed = 7
+        self.laser_count = 5
 
         # bullets: cannon
         self.cannon_w = 25
         self.cannon_h = 25
-        self.cannon_count = 1
+        self.cannon_arsenal_max = 1
         self.cannon_gravity = 100
         self.cannon_initial_velocity = 600
 
@@ -78,5 +78,5 @@ class Settings:
 
     def increase_difficulty(self):
         self.ship_speed *= self.difficulty_scale
-        self.bullet_speed *= self.difficulty_scale
+        self.laser_speed *= self.difficulty_scale
         self.alien_fleet_speed *= self.difficulty_scale

@@ -8,9 +8,9 @@ Also, a pause in game action (on pressing the p key)
 
 Resources:
     * course materials (obvi)
-    * cannonball image for gravitational ammo from https://pngimg.com/image/108039
+    * cannonball image for ammo from https://pngimg.com/image/108039
         license: attribution non commercial
-    * cannon sound for gravitational ammo from https://pixabay.com/sound-effects/film-special-effects-cannonball-89596/
+    * cannon sound for ammo from https://pixabay.com/sound-effects/film-special-effects-cannonball-89596/
         license: free for use
 
 Todo:
@@ -109,6 +109,14 @@ class AlienInvasion:
         if self.alien_fleet.check_fleet_bottom():
             self._check_game_status()
         
+        # check lasers viz aliens
+        laser_collisions = self.alien_fleet.check_laser_collisions(self.ship.arsenal.laser_arsenal)
+        if laser_collisions:
+            self.impact_sound.play()
+            self.impact_sound.fadeout(500)
+            # self.game_stats.update(collisions)
+            # self.HUD.update_scores()
+
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
             self.settings.increase_difficulty()
@@ -116,14 +124,6 @@ class AlienInvasion:
             # self.game_stats.update_level()
             # # update HUD view
             # self.HUD.update_level()
-
-        # check bullets viz aliens
-        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
-        if collisions:
-            self.impact_sound.play()
-            self.impact_sound.fadeout(500)
-            # self.game_stats.update(collisions)
-            # self.HUD.update_scores()
 
     def _check_game_status(self):
         """upon certain collisions, determine if game is over or if a new level should begin"""
@@ -197,7 +197,7 @@ class AlienInvasion:
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
         if event.key == pygame.K_c:
-            if self.ship.fire('gravitational'):
+            if self.ship.fire('cannon'):
                 self.cannon_sound.play()
                 self.cannon_sound.fadeout(1500)
         if event.key == pygame.K_SPACE:

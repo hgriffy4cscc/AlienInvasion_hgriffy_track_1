@@ -36,7 +36,7 @@ class Ship:
     def update(self):
         """update the position of the ship"""
         self._update_ship_movement()
-        self.arsenal.update_arsenal()
+        self.arsenal.update_arsenals()
 
     def _update_ship_movement(self):
         """calculate position of the ship (for self.update())"""

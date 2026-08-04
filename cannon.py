@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
-class BulletWithGravity(Sprite):
+class CannonBullet(Sprite):
 
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()
