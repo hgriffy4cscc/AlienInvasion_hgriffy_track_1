@@ -72,6 +72,13 @@ class GameStats():
         # update high_score
         self._update_hi_score()
 
+    def _update_score(self, collisions) -> None:
+        """update score for current game"""
+        for other_group in collisions.values():
+            for sprite in other_group:
+                self.score += sprite.points
+        # print(f'Score: {self.score}')
+
     def _update_max_score(self) -> None:
         """update the highest score for this session"""
         if self.score > self.max_score:
@@ -82,12 +89,6 @@ class GameStats():
         """update the all-time highest score"""
         if self.score > self.hi_score:
             self.hi_score = self.score
-
-    def _update_score(self, collisions) -> None:
-        """update score for current game"""
-        for _ in collisions.values():
-            self.score += self.settings.alien_points
-        # print(f'Score: {self.score}')
 
     def update_level(self) -> None:
         """when level completed update"""

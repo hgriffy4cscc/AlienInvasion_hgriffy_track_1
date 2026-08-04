@@ -47,6 +47,8 @@ class Alien(Sprite):
         self.x: int = self.rect.x
         self.y: int = self.rect.y
 
+        self.points = self.settings.alien_points
+
     def update(self) -> None:
         """per clock, update location"""
         temp_speed: int = self.settings.alien_fleet_speed

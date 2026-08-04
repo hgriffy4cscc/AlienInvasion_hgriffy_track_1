@@ -47,6 +47,9 @@ class Spectator(Sprite):
         self.x: int = self.rect.x
         self.y: int = self.rect.y
 
+        self.points: int = self.settings.spectator_points
+
+
     def update(self) -> None:
         """per clock, update location"""
         self.rect.x = self.x
