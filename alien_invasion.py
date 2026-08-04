@@ -14,8 +14,9 @@ Resources:
         license: free for use
 
 Todo:
-    * Add ammo
-    * Calculate and map gravitational movement
+    o re-enable alien + alien fleet
+    o add cost and score data for alien + alien fleet
+    o add spectators (~= aliens + cost and score)
 """
 
 import sys
@@ -24,8 +25,8 @@ from time import sleep
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
-# from alien import Alien
-# from alien_fleet import AlienFleet
+from alien import Alien
+from alien_fleet import AlienFleet
 # from button import Button
 # from game_stats import GameStats
 # from hud import HUD
@@ -39,7 +40,7 @@ class AlienInvasion:
         self.settings = Settings()
         # self.game_stats = GameStats(self)
 
-        # build the screen
+        ### build the screen
         self.screen = pygame.display.set_mode(
             (self.settings.screen_w,self.settings.screen_h)
             )
@@ -73,17 +74,17 @@ class AlienInvasion:
             self._check_events()
             if self.game_active:
                 self.ship.update()
-                # if not self.pause_aliens:
-                    # self.alien_fleet.update_fleet()
-                # self._check_collisions()
+                if not self.pause_aliens:
+                    self.alien_fleet.update_fleet()
+                self._check_collisions()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
     def initialize_game_entities(self):
         """initialize game entities"""
         self.ship = Ship(self, Arsenal(self))
-        # self.alien_fleet = AlienFleet(self)
-        # self.alien_fleet.create_fleet()
+        self.alien_fleet = AlienFleet(self)
+        self.alien_fleet.create_fleet()
 
     def _initialize_game_sounds(self):
         """prepare stuff to make sounds"""
@@ -94,52 +95,50 @@ class AlienInvasion:
         self.cannon_sound = pygame.mixer.Sound(self.settings.cannon_sound_file)
         self.cannon_sound.set_volume(0.7)
 
-        # self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
-        # self.impact_sound.set_volume(0.8)
+        self.impact_sound = pygame.mixer.Sound(self.settings.impact_sound_file)
+        self.impact_sound.set_volume(0.8)
     
-    # def _check_collisions(self):
-    #    """determine if any game entities have collided with any others"""
-    #     # check ship collisions viz aliens
-    #     if self.ship.check_collisions( self.alien_fleet.fleet):
-    #         self._check_game_status()
-    #         # de-increment 1 life
+    def _check_collisions(self):
+        """determine if any game entities have collided with any others"""
+        # check ship collisions viz aliens
+        if self.ship.check_collisions( self.alien_fleet.fleet):
+            self._check_game_status()
+            # de-increment 1 life
 
-    #         # check aliens viz bottom of screen
-    #     if self.alien_fleet.check_fleet_bottom():
-    #         self._check_game_status()
+        # check aliens viz bottom of screen
+        if self.alien_fleet.check_fleet_bottom():
+            self._check_game_status()
         
-    #     if self.alien_fleet.check_destroyed_status():
-    #         self._reset_level()
-    #         self.settings.increase_difficulty()
-    #         # update game stats for level
-    #         self.game_stats.update_level()
-    #         # update HUD view
-    #         self.HUD.update_level()
+        if self.alien_fleet.check_destroyed_status():
+            self._reset_level()
+            self.settings.increase_difficulty()
+            # # update game stats for level
+            # self.game_stats.update_level()
+            # # update HUD view
+            # self.HUD.update_level()
 
         # check bullets viz aliens
-        # collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
-        # if collisions:
-        #     self.impact_sound.play()
-        #     self.impact_sound.fadeout(500)
-        #     self.game_stats.update(collisions)
-        #     self.HUD.update_scores()
+        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        if collisions:
+            self.impact_sound.play()
+            self.impact_sound.fadeout(500)
+            # self.game_stats.update(collisions)
+            # self.HUD.update_scores()
 
     def _check_game_status(self):
         """upon certain collisions, determine if game is over or if a new level should begin"""
-        pass
         # if self.game_stats.ships_remaining > 0:
         #     self.game_stats.ships_remaining -= 1
-        #     self._reset_level()
-        #     sleep(0.5)
+        self._reset_level()
+        sleep(0.5)
         # else:
         #     self.game_active = False
 
     def _reset_level(self):
         """trigger actions required to start a new level"""
-        pass
-        # self.ship.arsenal.arsenal.remove()
-        # self.alien_fleet.fleet.empty()
-        # self.alien_fleet.create_fleet()
+        self.ship.arsenal.arsenal.remove()
+        self.alien_fleet.fleet.empty()
+        self.alien_fleet.create_fleet()
 
     def restart_game(self):
         """trigger actions to start a new game"""
@@ -157,7 +156,7 @@ class AlienInvasion:
         """implement steps to redraw the various game entities and make changes visible"""
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
-        # self.alien_fleet.draw()
+        self.alien_fleet.draw()
         # self.HUD.draw()
 
         # if not self.game_active:
