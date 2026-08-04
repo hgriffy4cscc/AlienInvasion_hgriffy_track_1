@@ -115,10 +115,11 @@ class AlienInvasion:
             self._check_game_status()
 
         # check lasers viz aliens
-        laser_collisions = self.alien_fleet.check_laser_collisions(self.ship.arsenal.laser_arsenal)
-        cannon_collisions = self.alien_fleet.check_cannon_collisions(
+        laser_alien_collisions = self.alien_fleet.check_laser_collisions(
+                self.ship.arsenal.laser_arsenal)
+        cannon_alien_collisions = self.alien_fleet.check_cannon_collisions(
                 self.ship.arsenal.cannon_arsenal)
-        if laser_collisions or cannon_collisions:
+        if laser_alien_collisions or cannon_alien_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
             # self.game_stats.update(collisions)
@@ -127,6 +128,24 @@ class AlienInvasion:
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
             self.settings.increase_difficulty()
+            # # update game stats for level
+            # self.game_stats.update_level()
+            # # update HUD view
+            # self.HUD.update_level()
+
+        # check lasers viz spectators
+        laser_spectator_collisions = self.spectator_crowd.check_laser_collisions(
+                self.ship.arsenal.laser_arsenal)
+        cannon_spectator_collisions = self.spectator_crowd.check_cannon_collisions(
+                self.ship.arsenal.cannon_arsenal)
+        if laser_spectator_collisions or cannon_spectator_collisions:
+            self.impact_sound.play()
+            self.impact_sound.fadeout(500)
+            # self.game_stats.update(collisions)
+            # self.HUD.update_scores()
+
+        if self.spectator_crowd.check_destroyed_status():
+            self.game_active = False
             # # update game stats for level
             # self.game_stats.update_level()
             # # update HUD view
