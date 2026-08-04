@@ -49,7 +49,6 @@ class CannonBullet(Sprite):
         # print(f"elapsed {t} :: motion: {motion} :: self.y: {self.y}")
         self.rect.y = int(self.y)
         if self.motion_h:
-            print(f'self.motion_h: {self.motion_h}')
             self.x += self.motion_h
             self.rect.x = int(self.x)
 

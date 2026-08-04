@@ -143,6 +143,12 @@ class AlienFleet:
         * remove alien + bullet"""
         return pygame.sprite.groupcollide(other_group, self.fleet, True, True)
      
+    def check_cannon_collisions(self, other_group):
+        """use built-in pygame method to 
+        * determine whether alien fleet has collided with a laser
+        * remove alien + bullet"""
+        return pygame.sprite.groupcollide(other_group, self.fleet, False, True)
+     
     def check_destroyed_status(self):
         """report whether any aliens remain within the total fleet"""
         return not self.fleet

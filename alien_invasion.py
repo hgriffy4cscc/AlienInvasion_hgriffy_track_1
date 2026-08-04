@@ -111,7 +111,8 @@ class AlienInvasion:
         
         # check lasers viz aliens
         laser_collisions = self.alien_fleet.check_laser_collisions(self.ship.arsenal.laser_arsenal)
-        if laser_collisions:
+        cannon_collisions = self.alien_fleet.check_cannon_collisions(self.ship.arsenal.cannon_arsenal)
+        if laser_collisions or cannon_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
             # self.game_stats.update(collisions)
@@ -136,7 +137,8 @@ class AlienInvasion:
 
     def _reset_level(self):
         """trigger actions required to start a new level"""
-        self.ship.arsenal.arsenal.remove()
+        for arsenal in self.ship.arsenal.all_arsenals:
+            arsenal.remove()
         self.alien_fleet.fleet.empty()
         self.alien_fleet.create_fleet()
 
