@@ -79,6 +79,10 @@ class Settings:
         self.alien_file: Path = self.images_path / 'enemy_4.png'
         self.alien_fleet_direction: int = 1
 
+        # spectator
+        self.spectator_file: Path = self.images_path / 'enemy_4.png'
+        self.spectator_fleet_direction: int = 1
+
         # button to start game
         self.button_w: int = 300
         self.button_h: int = 75
@@ -119,6 +123,11 @@ class Settings:
         self.alien_fleet_speed: int = 3
         self.alien_fleet_drop_speed: int = 20
         self.alien_points: int = 50
+
+        # spectators
+        self.spectator_w: int = 60
+        self.spectator_h: int = 60
+        self.spectator_points: int = -500
 
     def increase_difficulty(self) -> None:
         """when player completes a round, make game more difficult"""

@@ -27,6 +27,7 @@ from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
 from alien_fleet import AlienFleet
+from spectator_crowd import SpectatorCrowd
 # from alien import Alien
 # from button import Button
 # from game_stats import GameStats
@@ -87,6 +88,8 @@ class AlienInvasion:
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
+        self.spectator_crowd = SpectatorCrowd(self)
+        self.spectator_crowd.create_crowd()
 
     def _initialize_game_sounds(self) -> None:
         """prepare stuff to make sounds"""
@@ -161,6 +164,7 @@ class AlienInvasion:
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         self.alien_fleet.draw()
+        self.spectator_crowd.draw()
         # self.HUD.draw()
 
         # if not self.game_active:
