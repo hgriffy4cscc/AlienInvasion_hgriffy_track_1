@@ -1,47 +1,9 @@
-"""file to hold durable settings for Alien Invasion and related games
-Depends on:
-* none
-
-Is Depended on:
-* all
-
-Basic (__init__) Properties contain: ('display variables' = file path + sizing + color)
-* game:
-    * screen dimensions + clock speed
-    * initial difficulties
-    * top-level Path variables
-* ship:
-    * display variables
-    * ship count
-* bullets: laser + cannon
-    * display variables
-* alien:
-    * display variables
-* HUD + control button:
-    * display variables
-
-Dynamic Properties contain:
-* ship:
-    * motion
-* bullets: laser + cannon
-    * size
-    * motion parameters
-    * cost
-* aliens:
-    * size
-    * motion parameters
-    * points
-
-
-Methods control:
-* changing settings between rounds to increase difficulty
-
-"""
+"""Holds and manages key variables for objects throughout game to centralize updates."""
 
 from pathlib import Path
 
 class Settings:
-    """class for game-wide settings"""
+    """Holds all settings."""
 
     def __init__(self) -> None:
 
@@ -56,8 +18,10 @@ class Settings:
         self.images_path: Path = Path.cwd() / 'Assets' / 'images'
         self.sound_path: Path = Path.cwd() / 'Assets' / 'sound'
         self.fonts_path: Path = Path.cwd() / 'Assets' / 'Fonts'
-        self.bg_file: Path = self.images_path / 'webb_butterfly_lg.jpg'
         self.scores_file: Path = Path.cwd() / 'Assets' / 'file' / 'scores.json'
+
+        # background image
+        self.bg_file: Path = self.images_path / 'webb_butterfly_lg.jpg'
 
         # ship
         self.ship_file: Path = self.images_path / 'ship2(no bg).png'
@@ -88,8 +52,7 @@ class Settings:
         # HUD
         self.text_color: tuple[int, int, int] = (255, 255, 255)
         self.HUD_font_size: int = 20
-        self.font_file: Path = self.fonts_path / 'Silkscreen' / \
-            'Silkscreen-Bold.ttf'
+        self.font_file: Path = self.fonts_path / 'Silkscreen' / 'Silkscreen-Bold.ttf'
 
         self.initialize_dynamic_settings()
 
@@ -120,7 +83,7 @@ class Settings:
         self.the_rules.append(f'    - Spectators: {self.spectator_points}')
 
     def initialize_dynamic_settings(self) -> None:
-        """settings for game elements that may change between levels"""
+        """Settings for game elements that may change between levels or in response to events."""
         # ship
         self.ship_speed: int = 5
 
@@ -152,7 +115,7 @@ class Settings:
         self.spectator_points: int = -500
 
     def increase_difficulty(self) -> None:
-        """when player completes a round, make game more difficult"""
+        """Modifies relevant settings to increase difficulty between levels."""
         self.ship_speed *= round(self.difficulty_scale)
         self.laser_speed *= round(self.difficulty_scale)
         self.alien_fleet_speed *= round(self.difficulty_scale)
