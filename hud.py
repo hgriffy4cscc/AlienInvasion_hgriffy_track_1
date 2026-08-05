@@ -72,7 +72,7 @@ class HUD:
 
     def _update_max_score(self) -> None:
         """update highest score in current session"""
-        self.max_score_str = f'Max aScore: {self.game_stats.max_score: ,.0f}'
+        self.max_score_str = f'Max Score: {self.game_stats.max_score: ,.0f}'
         self.max_score_image = self.font.render(self.max_score_str, True, \
                 self.settings.text_color, None)
         self.max_score_rect = self.max_score_image.get_rect()
