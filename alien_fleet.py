@@ -1,41 +1,24 @@
-"""class to represent group of aliens in the game
-Depends on:
-* settings.py
-* alien.py
+"""Class to represent group of aliens in the game"""
 
-Is Depended on:
-* alien_invasion.py
-* alien.py
-
-Properties contain:
-* fleet dimensions + position
-* fleet motion parameters
-
-Methods control:
-* triggers creation of aliens
-* drawing on screen
-* motion
-* collisions
-* existence of fleet
-
-"""
-
+# Python modules
 from typing import TYPE_CHECKING
+# Installed modules
 import pygame
+# Custom/game modules
 from alien import Alien
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class AlienFleet:
-    """define the collection of Alien Sprites"""
+    """Defines the collection of Alien Sprites"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
 
         # connect fleet to game environment
-        self.game = game
+        self.game: AlienInvasion = game
         self.settings = game.settings
-        self.fleet = pygame.sprite.Group()
+        self.fleet: pygame.sprite.Group = pygame.sprite.Group()
         self.alien_fleet_direction: int = game.settings.alien_fleet_direction
         self.alien_fleet_drop_speed: int = game.settings.alien_fleet_drop_speed
 
@@ -44,7 +27,12 @@ class AlienFleet:
     ##################################
     ### PREPARE AND POSITION FLEET ###
     def create_fleet(self) -> None:
-        """determine initial dimensions of fleet within game boundaries"""
+        """Determine initial dimensions of fleet within game boundaries
+        
+        Effects:
+            Adds a collection of Alien sprites to the game, numbered and arranged to almost fill the top
+            part of the screen in a rectangular formation.
+        """
         alien_w: int = self.settings.alien_w
         alien_h: int = self.settings.alien_h
         screen_w: int = self.settings.screen_w
@@ -61,10 +49,19 @@ class AlienFleet:
         self._create_rectangle_fleet(alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset)
 
     def _create_rectangle_fleet(self,
-            alien_w, alien_h,
-                fleet_w, fleet_h,
-                x_offset, y_offset) -> None:
-        """generate individual aliens to fill space of the fleet"""
+            alien_w: int, alien_h: int,
+                fleet_w: int, fleet_h: int,
+                x_offset: int, y_offset: int) -> None:
+        """Generates individual alien sprites to fill space of the fleet
+        
+        Params:
+            alien_w, alien_h: Width and height in pixels for the image and rect for each sprite.
+            fleet_w, fleet_h: The number of alien sprites in each row and column.
+            x_offset, y_offset: The distance in pixels from the left and top of the screen to begin
+        
+        Effects:
+            Generates and aligns a sprite group of alien sprites in rows and columns.
+        """
         for row in range(fleet_h):
             current_y = (alien_h * row) + y_offset # determine how far down to place the alien
             for col in range(fleet_w):
@@ -73,8 +70,17 @@ class AlienFleet:
                     continue
                 self._create_alien(current_x, current_y)
 
-    def calculate_offsets(self, alien_w, alien_h, screen_w, fleet_w, fleet_h) -> tuple[int, int]:
-        """determine positioning of and space between aliens within fleet"""
+    def calculate_offsets(self, alien_w: int, alien_h: int, screen_w: int, fleet_w: int, fleet_h: int) -> tuple[int, int]:
+        """Determines positioning of and space between aliens within fleet.
+        
+        Params:
+            alien_w, alien_h: Width and height in pixels for the image and rect for each sprite.
+            screen_w: Width in pixels of the entire screen
+            fleet_w, fleet_h: The number of alien sprites in each row and column.
+
+        Returns:
+            [tuple]: the horizontal and vertical distances from screen edges to begin creating sprites
+        """
         half_screen: int = self.settings.screen_h // 2
         fleet_horizontal_space: int = alien_w * fleet_w
         fleet_vertical_space: int = alien_h * fleet_h
@@ -82,9 +88,16 @@ class AlienFleet:
         y_offset: int = (half_screen - fleet_vertical_space)//2
         return x_offset, y_offset
 
-    def calculate_fleet_dimensions(self, alien_w, screen_w, alien_h, screen_h) -> tuple[int, int]:
-        """determine area to be occupied by fleet as a whole"""
+    def calculate_fleet_dimensions(self, alien_w: int, screen_w: int, alien_h: int, screen_h: int) -> tuple[int, int]:
+        """Determines number of alien sprites to include in each row and column.
+        
+        Params:
+            alien_w, alien_h: Width and height in pixels for the image and rect for each sprite.
+            screen_w, screen_h: Width and height in pixels of the entire screen
 
+        Returns:
+            fleet_w, fleet_h [tuple]: the number of alien sprites to create in each row and column
+        """
         fleet_w: int = screen_w // alien_w
         fleet_h: int = (screen_h // 2) // alien_h
 
@@ -101,26 +114,42 @@ class AlienFleet:
         return fleet_w, fleet_h
 
     def _create_alien(self, current_x: int, current_y: int) -> None:
-        """add an individual alien to the fleet at specific position"""
+        """Adds an individual alien sprite to the fleet group at specific position.
+        
+        Params:
+            current_x, current_y: The horizontal and vertical position for the sprite on the screen.
+
+        Effects:
+            Appends one new alien sprite to the sprite group.
+        """
         new_alien: Alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
 
     #################
     ### GAME PLAY ###
-    ### REPRESENT FLEET ON THE SCREEN ###
+    ### REPRESENT CROWD ON THE SCREEN ###
     def update_fleet(self) -> None:
-        """per clock, update motion/position for entire fleet"""
+        """Per clock tick, updates screen representation for entire fleet.
+        
+        Effects:
+            Changes the location value for each sprite in the sprite group.
+        """
         self._reverse_fleet_at_screen_edge()
         self.fleet.update()
 
     def draw(self) -> None:
-        """per clock, update motion/position for each alien"""
+        """Per clock tick, generates screen image for each alien sprite."""
         alien: 'Alien'
         for alien in self.fleet:
             alien.draw_alien()
 
     def _reverse_fleet_at_screen_edge(self) -> None:
-        """determine if fleet has reached side edge of game screen + reverse if so"""
+        """Determines if fleet has reached side edge of game screen + reverses direction if so.
+        
+        Effects:
+            [if triggered]: Update value for direction.
+            [if triggered]: Triggers method to change vertical location of alien fleet sprite group
+        """
         alien: Alien
         for alien in self.fleet:
             if alien.check_edges():
@@ -129,7 +158,11 @@ class AlienFleet:
                 break
 
     def check_fleet_bottom(self) -> bool:
-        """determine + report if fleet has reached bottom of game space"""
+        """Determines + reports if fleet has reached bottom of game space.
+        
+        Returns:
+            [bool]: True if any alien sprite touches the bottom edge of the screen, False otherwise.
+        """
         alien: Alien
         for alien in self.fleet:
             if alien.rect.bottom >= self.settings.screen_h:
@@ -137,24 +170,40 @@ class AlienFleet:
         return False
 
     def _drop_alien_fleet(self) -> None:
-        """move fleet down when it has reached screen side edge"""
+        """Moves fleet down when it has reached screen side edge"""
         alien: Alien
         for alien in self.fleet:
             alien.y += self.settings.alien_fleet_drop_speed
 
     ### CHECK IF FLEET HAS HIT AMMO OR SHIP
-    def check_laser_collisions(self, other_group) -> dict:
-        """use built-in pygame method to 
-        * determine whether alien fleet has collided with a laser
-        * remove alien + bullet"""
+    def check_laser_collisions(self, other_group: pygame.sprite.Group) -> dict:
+        """Uses built-in pygame method to determine whether alien fleet has collided with a laser.
+        
+        Params:
+            other_group: Any collection of laser sprites in the game.
+
+        Returns:
+            [dict]: JSON object listing sprites that collided.
+
+        Effects:
+            Removes alien sprite + laser sprite from their respective sprite groups.
+        """
         return pygame.sprite.groupcollide(other_group, self.fleet, True, True)
 
     def check_cannon_collisions(self, other_group) -> dict:
-        """use built-in pygame method to 
-        * determine whether alien fleet has collided with a laser
-        * remove alien + bullet"""
+        """Uses built-in pygame method to determine whether alien fleet has collided with a cannonball.
+        
+        Params:
+            other_group: Any collection of cannon sprites in the game.
+
+        Returns:
+            [dict]: JSON object listing sprites that collided.
+
+        Effects:
+            Remove alien sprite + cannonball sprite from their respective sprite groups.
+        """
         return pygame.sprite.groupcollide(other_group, self.fleet, False, True)
 
     def check_destroyed_status(self) -> bool:
-        """report whether any aliens remain within the total fleet"""
+        """Reports whether any aliens remain within the total fleet."""
         return not self.fleet

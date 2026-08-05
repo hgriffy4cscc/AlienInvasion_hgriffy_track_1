@@ -1,38 +1,33 @@
-"""class to represent individual aliens in the game
-Depends on:
-* settings.py
+"""Construct + represent individual alien sprites in the game"""
 
-Is Depended on:
-* alien_invasion.py
-* alien_fleet.py
-
-Properties contain:
-* positioning
-* media (image & sound)
-
-Methods control:
-* drawing on screen
-* motion
-"""
-
+# Python modules
 from typing import TYPE_CHECKING
+# Installed modules
 import pygame
 from pygame.sprite import Sprite
+# Custom/game modules
 
 if TYPE_CHECKING:
     from alien_fleet import AlienFleet
 
 class Alien(Sprite):
-    """define individual alien Sprites"""
+    """Define individual alien Sprites"""
 
     def __init__(self, fleet: 'AlienFleet', x: int, y: int) -> None:
+        """Initialize individual alien
+        
+        Args:
+            fleet: reference to the full Sprite group of aliens
+            x: horizontal position on the screen
+            y: vertical position on the screen
+        """
         super().__init__()
 
         # connect alien to game environment
         self.screen = fleet.game.screen
-        self.boundaries = fleet.game.screen.get_rect()
+        self.boundaries: pygame.Rect = fleet.game.screen.get_rect()
         self.settings = fleet.game.settings
-        self.fleet = fleet
+        self.fleet: AlienFleet = fleet
 
         # alien media (image)
         self.image = pygame.image.load(self.settings.alien_file)
@@ -41,26 +36,29 @@ class Alien(Sprite):
             )
 
         # positioning
-        self.rect = self.image.get_rect()
+        self.rect: pygame.Rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.x: int = self.rect.x
         self.y: int = self.rect.y
 
-        self.points = self.settings.alien_points
+        self.points: int = self.settings.alien_points
 
     def update(self) -> None:
-        """per clock, update location"""
+        """Per clock tick, updates location of this Sprite"""
         temp_speed: int = self.settings.alien_fleet_speed
         self.x += temp_speed * self.fleet.alien_fleet_direction
         self.rect.x = self.x
         self.rect.y = self.y
 
     def check_edges(self) -> bool:
-        """report if alien within screen boundaries"""
+        """Reports if alien is at or outside screen horizontal boundaries.
+        
+        Returns:
+            [bool]: True if alien is at or beyond horizontal boundaries"""
         return (self.rect.right >= self.boundaries.right
                 or self.rect.left <= self.boundaries.left)
 
     def draw_alien(self) -> None:
-        """represent alien on the screen"""
+        """Represents alien on the screen"""
         self.screen.blit(self.image, self.rect)
