@@ -1,10 +1,4 @@
-"""alien_invasion.py
-
-This project customizes the Alien Invasion game
-by modifying the ammunition fired by the ship to follow gravitational arcs
-and by introducing another set of entities representing friendlies
-who need to be spared from the falling ammo.
-Also, a pause in game action (on pressing the p key)
+"""An alien invader-style game with modifications (spectators, cannon fire)
 
 Resources:
     * course materials (obvi)
@@ -18,16 +12,14 @@ Resources:
     * oof sound for spectators from https://pixabay.com/sound-effects/people-homemadeoof-47509/
         license: royalty-free
 
-Todo:
-    x re-enable alien + alien fleet
-    x add cost and score data for alien + alien fleet
-    x add spectators (~= aliens + cost and score)
-    o redo module comments for all files
 """
 
+# Python modules
 from time import sleep
 import sys
+# Installed modules
 import pygame
+# Custom/game modules
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
@@ -39,7 +31,7 @@ from game_stats import GameStats
 from hud import HUD
 
 class AlienInvasion:
-    """class to manage the entire game"""
+    """Orchestrator class to manage the entire game"""
 
     def __init__(self) -> None:
 
@@ -76,7 +68,7 @@ class AlienInvasion:
         self.pause_aliens: bool = False
 
     def run_game(self) -> None:
-        """core method to coordinate the game -- called from top level of the program"""
+        """Core method to coordinate the game -- called from top level of the script"""
         # Game Loop
         while self.running:
             self._check_player_events()
@@ -89,7 +81,7 @@ class AlienInvasion:
             self.clock.tick(self.settings.FPS)
 
     def initialize_game_entities(self) -> None:
-        """initialize game entities"""
+        """Initialize game entities"""
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet = AlienFleet(self)
         self.alien_fleet.create_fleet()
@@ -97,7 +89,7 @@ class AlienInvasion:
         self.spectator_crowd.create_crowd()
 
     def _initialize_game_sounds(self) -> None:
-        """prepare stuff to make sounds"""
+        """Prepare for stuff in the game to make sounds"""
         pygame.mixer.init()
         self.laser_sound = pygame.mixer.Sound(self.settings.bullet_sound_file)
         self.laser_sound.set_volume(0.7)
@@ -112,7 +104,7 @@ class AlienInvasion:
         self.spectator_sound.set_volume(0.8)
 
     def _check_game_collisions(self) -> None:
-        """determine if any game entities have collided with any others"""
+        """Determine if any game entities have collided with any others"""
 
         #### ALIEN COLLISIONS ####
         # check ship--alien collisions
@@ -172,13 +164,9 @@ class AlienInvasion:
         # check if all spectators are gone
         if self.spectator_crowd.check_destroyed_status():
             self._check_game_status()
-            # # update game stats for level
-            # self.game_stats.update_level()
-            # # update HUD view
-            # self.HUD.update_level()
 
     def _check_game_status(self) -> None:
-        """upon certain collisions, determine if game is over or if a new level should begin"""
+        """Helper function: Upon certain collisions, determine if game is over or if a new level should begin"""
         if self.game_stats.ships_remaining > 0:
             self.game_stats.ships_remaining -= 1
             self._reset_level()
@@ -187,7 +175,7 @@ class AlienInvasion:
             self.game_active = False
 
     def _reset_level(self) -> None:
-        """trigger actions required to start a new level"""
+        """Helper function: Trigger actions required to start a new level"""
         for arsenal in self.ship.arsenal.all_arsenals:
             for bullet in arsenal:
                 bullet.remove()
@@ -195,7 +183,7 @@ class AlienInvasion:
         self.alien_fleet.create_fleet()
 
     def restart_game(self) -> None:
-        """trigger actions to start a new game"""
+        """Trigger actions to start an entirely new game"""
         self.settings.initialize_dynamic_settings()
         self.game_stats.reset_stats()
         self.HUD.update_scores()
@@ -206,20 +194,22 @@ class AlienInvasion:
         pygame.mouse.set_visible(False)
 
     def _update_screen(self) -> None:
-        """implement steps to redraw the various game entities and make changes visible"""
+        """Implement steps to redraw the various game entities and make changes visible"""
         self.screen.blit(self.bg, (0,0))
         self.ship.draw()
         self.alien_fleet.draw()
         self.spectator_crowd.draw()
         self.HUD.draw()
 
-        if not self.game_active:
+        if not self.game_active: # if game ended, offer user chance to start a new one
             self.play_button.draw()
             pygame.mouse.set_visible(True)
+
+        # push changes to user screen
         pygame.display.flip()
 
     def _check_player_events(self) -> None:
-        """monitor player input and respond accordingly"""
+        """Helper + orchestrator method: Monitor player input and respond accordingly"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 # self.game_stats.save_scores()
@@ -234,29 +224,22 @@ class AlienInvasion:
                 self._check_button_clicked()
 
     def _check_button_clicked(self) -> None:
-        """process when player clicks the start game button"""
+        """Respond when player clicks the star- game button"""
         mouse_pos = pygame.mouse.get_pos()
         print(f'caught mouse click! mouse_pos = {mouse_pos}')
         if self.play_button.check_clicked(mouse_pos):
             self.restart_game()
 
-    def _check_keyup_events(self, event) -> None:
-        """process when a key is released"""
-        if event.key == pygame.K_LEFT:
-            self.ship.moving_left = False
-        if event.key == pygame.K_RIGHT:
-            self.ship.moving_right = False
-
     def _check_keydown_events(self, event) -> None:
-        """process when a key is pressed"""
-        # temp for testing: remove all spectators
-        if event.key == pygame.K_s:
-            for spectator in self.spectator_crowd.crowd:
-                spectator.remove(self.spectator_crowd.crowd)
-        # temp for testing: remove all ships
-        if event.key == pygame.K_a:
-            self.settings.ship_count = 0
-            self._check_game_status()
+        """Respond when a key is pressed"""
+        # # temp for testing: remove all spectators
+        # if event.key == pygame.K_s:
+        #     for spectator in self.spectator_crowd.crowd:
+        #         spectator.remove(self.spectator_crowd.crowd)
+        # # temp for testing: remove all ships
+        # if event.key == pygame.K_a:
+        #     self.settings.ship_count = 0
+        #     self._check_game_status()
         # temp for testing: drop fleet
         if event.key == pygame.K_DOWN:
             self.alien_fleet._drop_alien_fleet()
@@ -277,11 +260,18 @@ class AlienInvasion:
             # self.game_stats.save_scores()
             pygame.quit()
             sys.exit()
-        if event.key == pygame.K_p:
-            if self.pause_aliens:
-                self.pause_aliens = False
-            else:
-                self.pause_aliens = True
+        # if event.key == pygame.K_p:
+        #     if self.pause_aliens:
+        #         self.pause_aliens = False
+        #     else:
+        #         self.pause_aliens = True
+
+    def _check_keyup_events(self, event) -> None:
+        """Respond when a key is released"""
+        if event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
 
 if __name__ == '__main__':
     """start the whole thing running"""
