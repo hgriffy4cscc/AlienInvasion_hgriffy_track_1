@@ -20,8 +20,9 @@ Resources:
 
 Todo:
     x re-enable alien + alien fleet
-    o add cost and score data for alien + alien fleet
-    o add spectators (~= aliens + cost and score)
+    x add cost and score data for alien + alien fleet
+    x add spectators (~= aliens + cost and score)
+    o redo module comments for all files
 """
 
 from time import sleep
