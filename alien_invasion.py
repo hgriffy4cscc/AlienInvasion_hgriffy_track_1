@@ -115,7 +115,6 @@ class AlienInvasion:
         # check ship collisions viz aliens
         if self.ship.check_collisions( self.alien_fleet.fleet):
             self._check_game_status()
-            # de-increment 1 life
 
         # check aliens viz bottom of screen
         if self.alien_fleet.check_fleet_bottom():
@@ -181,7 +180,8 @@ class AlienInvasion:
     def _reset_level(self) -> None:
         """trigger actions required to start a new level"""
         for arsenal in self.ship.arsenal.all_arsenals:
-            arsenal.remove()
+            for bullet in arsenal:
+                bullet.remove()
         self.alien_fleet.fleet.empty()
         self.alien_fleet.create_fleet()
 
@@ -194,7 +194,6 @@ class AlienInvasion:
         self.ship._center_ship()
         self.game_active = True
         pygame.mouse.set_visible(False)
-
 
     def _update_screen(self) -> None:
         """implement steps to redraw the various game entities and make changes visible"""
@@ -227,6 +226,7 @@ class AlienInvasion:
     def _check_button_clicked(self) -> None:
         """process when player clicks the start game button"""
         mouse_pos = pygame.mouse.get_pos()
+        print(f'caught mouse click! mouse_pos = {mouse_pos}')
         if self.play_button.check_clicked(mouse_pos):
             self.restart_game()
 
@@ -239,6 +239,14 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event) -> None:
         """process when a key is pressed"""
+        # temp for testing: remove all spectators
+        if event.key == pygame.K_s:
+            for puppy in self.spectator_crowd.crowd:
+                puppy.remove(self.spectator_crowd.crowd)
+        # temp for testing: remove all ships
+        if event.key == pygame.K_a:
+            self.settings.ship_count = 0
+            self._check_game_status()
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         if event.key == pygame.K_RIGHT:

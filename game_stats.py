@@ -59,7 +59,7 @@ class GameStats():
 
     def reset_stats(self) -> None:
         """when game restarted (not launched) reset scores"""
-        self.ships_remaining = self.settings.starting_ship_count
+        self.ships_remaining = self.settings.ship_count
         self.game_level = 1
         self.score = 0
 

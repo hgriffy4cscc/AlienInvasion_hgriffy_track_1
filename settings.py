@@ -63,7 +63,7 @@ class Settings:
         self.ship_file: Path = self.images_path / 'ship2(no bg).png'
         self.ship_w: int = 40
         self.ship_h: int = 60
-        self.starting_ship_count: int = 3
+        self.ship_count: int = 3
         self.budget = 1000
 
         # bullet: lasers
