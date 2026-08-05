@@ -107,15 +107,17 @@ class Settings:
         self.rules_font_size: int = 20
 
         # the rules (to display at launch)
-        self.the_rules = f'''   Welcome to modified Alien Invasion. Some changes:\n
-            1. In addition to lasers, you can FIRE A CANNONBALL (press c)\n
-            2. In addition to aliens, there are spectators (puppies). DON\'T HURT THEM!\n
-            3. You have a budget for ammo:\n
-               - Lasers cost {self.laser_cost}\n
-               - Cannonballs cost {self.cannon_cost}\n
-            4. Point system:\n
-               - Aliens +{self.alien_points} (increased the lower the aliens get)\n
-               - Spectators: {self.spectator_points}'''
+        self.the_rules = []
+        self.the_rules.append('   Welcome to modified Alien Invasion. Some changes:')
+        self.the_rules.append('1. In addition to lasers, you can FIRE A CANNONBALL (press c)')
+        self.the_rules.append('2. In addition to aliens, there are spectators (puppies)')
+        self.the_rules.append('     TRY NOT TO HURT THEM!  AIM CAREFULLY')
+        self.the_rules.append('3. You have a budget for ammo:')
+        self.the_rules.append(f'    - Lasers cost {self.laser_cost} points')
+        self.the_rules.append(f'    - Cannonballs cost {self.cannon_cost} points')
+        self.the_rules.append('4. Point system:')
+        self.the_rules.append(f'    - Aliens +{self.alien_points}')
+        self.the_rules.append(f'    - Spectators: {self.spectator_points}')
 
     def initialize_dynamic_settings(self) -> None:
         """settings for game elements that may change between levels"""

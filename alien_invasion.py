@@ -159,7 +159,7 @@ class AlienInvasion:
         if cannon_spectator_collisions:
             self.spectator_sound.play()
             self.spectator_sound.fadeout(500)
-            self.game_stats.update(cannon_alien_collisions)
+            self.game_stats.update(cannon_spectator_collisions) # should be impossible
             self.HUD.update_scores()
 
         if self.spectator_crowd.check_destroyed_status():

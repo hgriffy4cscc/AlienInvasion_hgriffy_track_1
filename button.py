@@ -34,6 +34,7 @@ class Button():
         # build holders and objects
         self.play_button_rect = pygame.Rect(0,0, self.settings.play_button_w, self.settings.play_button_h)
         self.play_button_rect.center = self.boundaries.center
+        self.play_button_rect.top += 50
         self.rules_rect = pygame.Rect(0,0, self.settings.rules_box_w, self.settings.rules_box_h)
         self.rules_rect.center = self.boundaries.center
         self._prep_rules_msg(self.settings.the_rules)
@@ -44,17 +45,23 @@ class Button():
         self.play_msg_image_rect = self.play_msg_image.get_rect()
         self.play_msg_image_rect.center = self.play_button_rect.center
 
-    def _prep_rules_msg(self, msg):
-        print(msg)
-        self.rules_msg_image = self.rules_font.render(msg, True, self.settings.text_color, None)
-        self.rules_msg_image_rect = self.rules_msg_image.get_rect()
-        self.rules_msg_image_rect.center = self.rules_rect.center
+    def _prep_rules_msg(self, the_rules):
+        self.rules_msg_images_n_rects: list[tuple] = []
+        tmp_rule_y: int = self.rules_rect.top + 25
+        for rule in the_rules:
+            tmp_rule_image = self.rules_font.render(rule, True, self.settings.text_color, None)
+            tmp_rule_rect = tmp_rule_image.get_rect()
+            tmp_rule_rect.left = self.rules_rect.left + 25
+            tmp_rule_rect.top = tmp_rule_y
+            self.rules_msg_images_n_rects.append( (tmp_rule_image, tmp_rule_rect))
+            tmp_rule_y += tmp_rule_rect.height + 10
 
     def draw(self) -> None:
         """put the play button and rules object on the screen"""
-        # the rules object
+        # the rules
         self.screen.fill(self.settings.rules_box_color, self.rules_rect)
-        self.screen.blit(self.rules_msg_image, self.rules_msg_image_rect)
+        for rule_obj in self.rules_msg_images_n_rects:
+            self.screen.blit(rule_obj[0], rule_obj[1])
 
         # the button object
         self.screen.fill(self.settings.play_button_color, self.play_button_rect)
