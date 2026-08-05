@@ -78,12 +78,12 @@ class AlienInvasion:
         """core method to coordinate the game -- called from top level of the program"""
         # Game Loop
         while self.running:
-            self._check_events()
+            self._check_player_events()
             if self.game_active:
                 self.ship.update()
+                self._check_game_collisions()
                 if not self.pause_aliens:
                     self.alien_fleet.update_fleet()
-                self._check_game_collisions()
             self._update_screen()
             self.clock.tick(self.settings.FPS)
 
@@ -112,30 +112,35 @@ class AlienInvasion:
 
     def _check_game_collisions(self) -> None:
         """determine if any game entities have collided with any others"""
-        # check ship collisions viz aliens
-        if self.ship.check_collisions( self.alien_fleet.fleet):
+
+        #### ALIEN COLLISIONS ####
+        # check ship--alien collisions
+        if self.ship.check_collisions(self.alien_fleet.fleet):
             self._check_game_status()
 
-        # check aliens viz bottom of screen
+        # check aliens--screen-bottom collisions
         if self.alien_fleet.check_fleet_bottom():
             self._check_game_status()
 
-        # check lasers viz aliens
+        # check laser--alien collisions
         laser_alien_collisions = self.alien_fleet.check_laser_collisions(
                 self.ship.arsenal.laser_arsenal)
-        cannon_alien_collisions = self.alien_fleet.check_cannon_collisions(
-                self.ship.arsenal.cannon_arsenal)
         if laser_alien_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
             self.game_stats.update(laser_alien_collisions)
             self.HUD.update_scores()
+
+        # check cannon--alien collisions
+        cannon_alien_collisions = self.alien_fleet.check_cannon_collisions(
+                self.ship.arsenal.cannon_arsenal)
         if cannon_alien_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
             self.game_stats.update(cannon_alien_collisions)
             self.HUD.update_scores()
 
+        # check if all aliens are gone
         if self.alien_fleet.check_destroyed_status():
             self._reset_level()
             self.settings.increase_difficulty()
@@ -144,25 +149,28 @@ class AlienInvasion:
             # update HUD view
             self.HUD.update_level()
 
-        # check lasers + cannon viz spectators
+        #### SPECTATOR COLLISIONS ####
+        # check laser--spectator collisions
         laser_spectator_collisions = self.spectator_crowd.check_laser_collisions(
                 self.ship.arsenal.laser_arsenal)
-        cannon_spectator_collisions = self.spectator_crowd.check_cannon_collisions(
-                self.ship.arsenal.cannon_arsenal)
         if laser_spectator_collisions:
             self.spectator_sound.play()
             self.spectator_sound.fadeout(500)
             self.game_stats.update(laser_spectator_collisions)
             self.HUD.update_scores()
 
+        # check cannon-spectator collisions (should not be possible)
+        cannon_spectator_collisions = self.spectator_crowd.check_cannon_collisions(
+                self.ship.arsenal.cannon_arsenal)
         if cannon_spectator_collisions:
             self.spectator_sound.play()
             self.spectator_sound.fadeout(500)
-            self.game_stats.update(cannon_spectator_collisions) # should be impossible
+            self.game_stats.update(cannon_spectator_collisions)
             self.HUD.update_scores()
 
+        # check if all spectators are gone
         if self.spectator_crowd.check_destroyed_status():
-            self.game_active = False
+            self._check_game_status()
             # # update game stats for level
             # self.game_stats.update_level()
             # # update HUD view
@@ -192,6 +200,7 @@ class AlienInvasion:
         self.HUD.update_scores()
         self._reset_level()
         self.ship._center_ship()
+        self.spectator_crowd.create_crowd()
         self.game_active = True
         pygame.mouse.set_visible(False)
 
@@ -208,7 +217,7 @@ class AlienInvasion:
             pygame.mouse.set_visible(True)
         pygame.display.flip()
 
-    def _check_events(self) -> None:
+    def _check_player_events(self) -> None:
         """monitor player input and respond accordingly"""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -241,12 +250,15 @@ class AlienInvasion:
         """process when a key is pressed"""
         # temp for testing: remove all spectators
         if event.key == pygame.K_s:
-            for puppy in self.spectator_crowd.crowd:
-                puppy.remove(self.spectator_crowd.crowd)
+            for spectator in self.spectator_crowd.crowd:
+                spectator.remove(self.spectator_crowd.crowd)
         # temp for testing: remove all ships
         if event.key == pygame.K_a:
             self.settings.ship_count = 0
             self._check_game_status()
+        # temp for testing: drop fleet
+        if event.key == pygame.K_DOWN:
+            self.alien_fleet._drop_alien_fleet()
         if event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         if event.key == pygame.K_RIGHT:
