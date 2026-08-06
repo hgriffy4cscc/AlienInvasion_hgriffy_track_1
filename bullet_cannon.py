@@ -1,33 +1,21 @@
-"""class to define and control a bullet that will obey gravity (ie fall back down)
-Depends on:
-* settings.py
-* 
+"""Generates and manages sprite representing a cannonball (gravity-affected)."""
 
-Is Depended on:
-* alien_invasion.py
-* 
-
-Properties contain:
-* 
-
-Methods control:
-* 
-"""
-
+# Python modules
 from typing import TYPE_CHECKING
+# Installed modules
 import pygame
 from pygame.sprite import Sprite
-
+# Custom/game modules
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Cannon(Sprite):
-    """manage a cannon-style ammunition Sprite"""
+    """Manages a cannonball-style ammunition Sprite"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()
 
-        self.game = game
+        self.game: AlienInvasion = game
 
         self.screen = game.screen
         self.settings = game.settings
@@ -39,7 +27,7 @@ class Cannon(Sprite):
                  self.settings.cannon_h)
             )
 
-        self.rect = self.image.get_rect()
+        self.rect: pygame.Rect = self.image.get_rect()
         self.rect.midbottom = game.ship.rect.midtop
         self.y: int = self.rect.y
         self.initial_y: int = self.rect.y
@@ -51,6 +39,11 @@ class Cannon(Sprite):
 
 
     def _discern_horizontal_motion(self) -> None:
+        """Based on ship motion, determines if cannonball should move horizontally.
+        
+        Effects:
+            Updates attribute.
+        """
         if self.game.ship.moving_left:
             self.motion_h = -self.settings.ship_speed // 2
         elif self.game.ship.moving_right:
@@ -59,17 +52,25 @@ class Cannon(Sprite):
             self.motion_h = 0
 
     def update(self) -> None:
-        """update variables based on game action"""
+        """Updates variables based on game action"""
+        self._determine_vertical_motion()
+        self.determine_horizontal_motion()
+
+    def determine_horizontal_motion(self):
+        """Per clock tick, determines new horizontal position of cannonball."""
+        if self.motion_h:
+            self.x += self.motion_h
+            self.rect.x = int(self.x)
+
+    def _determine_vertical_motion(self):
+        """Per clock tick + imitating gravity, determines new vertical position of cannonball."""
         gravity: int = self.settings.cannon_gravity
         velocity: int = self.settings.cannon_initial_velocity
         t: float = (pygame.time.get_ticks() - self.launch_time) / 1000
         motion_y: int = int((velocity * t) - (gravity * (t ** 2)))
         self.y = self.initial_y - motion_y
         self.rect.y = int(self.y)
-        if self.motion_h:
-            self.x += self.motion_h
-            self.rect.x = int(self.x)
 
     def draw(self) -> None:
-        """actually represent the bullet on the screen"""
+        """Represents the bullet on the screen."""
         self.screen.blit(self.image, self.rect)

@@ -1,28 +1,16 @@
-"""class to define and control a laser style bullet
-Depends on:
-* settings.py
-* 
+"""Generates and manages sprite representing a cannonball (gravity-affected)."""
 
-Is Depended on:
-* alien_invasion.py
-* 
-
-Properties contain:
-* 
-
-Methods control:
-* 
-"""
-
+# Python modules
 from typing import TYPE_CHECKING
+# Installed modules
 import pygame
 from pygame.sprite import Sprite
-
+# Custom/game modules
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Laser(Sprite):
-    """manage laser-style ammunition Sprite"""
+    """Manages a laser-style ammunition Sprite"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         super().__init__()
@@ -35,15 +23,15 @@ class Laser(Sprite):
             (self.settings.laser_w,self.settings.laser_h)
             )
 
-        self.rect = self.image.get_rect()
+        self.rect: pygame.Rect = self.image.get_rect()
         self.rect.midtop = game.ship.rect.midtop
         self.y: int = self.rect.y
 
     def update(self) -> None:
-        """modify variables based on game action"""
+        """Updates variables based on game action"""
         self.y -= self.settings.laser_speed
         self.rect.y = int(self.y)
 
     def draw(self) -> None:
-        """actually put the bullet on the screen"""
+        """Represents the bullet on the screen."""
         self.screen.blit(self.image, self.rect)
