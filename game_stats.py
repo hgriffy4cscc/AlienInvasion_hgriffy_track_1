@@ -71,14 +71,12 @@ class GameStats():
             collisions [dict]: list of sprites involved in collisions to be scored.
             bullet [Laser | Cannon]: bullet fired in game to be scored
         """
-        print(f'Score after: {self.score}')
         # update score if triggerd by collision
         if collisions:
             self._update_score_for_collisions(collisions)
         # update score if triggerd by bullet firing
         if bullet:
             self._update_score_for_cost(bullet)
-        print(f'Score after: {self.score}')
         # update max_score
         self._update_max_score()
         # update high_score
