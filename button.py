@@ -1,65 +1,66 @@
-"""create button to begin the game
-Depends on:
-* settings.py
-* 
+"""Creates and displays rules + button to being the game."""
 
-Is Depended on:
-* alien_invasion.py
-* 
-
-Properties contain:
-* 
-
-Methods control:
-* 
-"""
+# Python modules
 from typing import TYPE_CHECKING
+# Installed modules
 import pygame.font
-
+# Game/custom modules
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
 class Button:
-    """create and manage button to begin the game"""
+    """Creates and manages rules display + button to begin the game"""
 
     def __init__(self, game: 'AlienInvasion') -> None:
         self.game: AlienInvasion = game
         self.screen = game.screen
-        self.boundaries = game.screen.get_rect()
+        self.boundaries: pygame.Rect = game.screen.get_rect()
         self.settings = game.settings
 
         self.play_button_font = pygame.font.Font(self.settings.font_file, self.settings.button_font_size)
         self.rules_font = pygame.font.Font(self.settings.font_file, self.settings.rules_font_size)
 
         # build holders and objects
-        self.play_button_rect = pygame.Rect(0,0, self.settings.play_button_w, self.settings.play_button_h)
+        self.play_button_rect: pygame.Rect = pygame.Rect(0,0, self.settings.play_button_w, self.settings.play_button_h)
         self.play_button_rect.center = self.boundaries.center
         self.play_button_rect.top += 50
-        self.rules_rect = pygame.Rect(0,0, self.settings.rules_box_w, self.settings.rules_box_h)
+        self.rules_rect: pygame.Rect = pygame.Rect(0,0, self.settings.rules_box_w, self.settings.rules_box_h)
         self.rules_rect.center = self.boundaries.center
         self._prep_rules_msg(self.settings.the_rules)
         self._prep_play_msg(self.settings.button_msg)
 
-    def _prep_play_msg(self, msg):
+    def _prep_play_msg(self, msg: str):
+        """Converts text for button into image + rect for display.
+        
+        Params:
+            msg: text to be displayed on button
+        """
         self.play_msg_image = self.play_button_font.render(msg, True, self.settings.text_color, None)
-        self.play_msg_image_rect = self.play_msg_image.get_rect()
+        self.play_msg_image_rect: pygame.Rect = self.play_msg_image.get_rect()
         self.play_msg_image_rect.center = self.play_button_rect.center
 
-    def _prep_rules_msg(self, the_rules):
+    def _prep_rules_msg(self, the_rules: list[str]):
+        """Converts text for rules into image + rect for display.
+        
+        Params:
+            the_rules: list of strings to be displayed
+        """
         self.rules_msg_images_n_rects: list[tuple] = []
         tmp_rule_y: int = self.rules_rect.top + 25
+        rule: str
         for rule in the_rules:
             tmp_rule_image = self.rules_font.render(rule, True, self.settings.text_color, None)
-            tmp_rule_rect = tmp_rule_image.get_rect()
+            tmp_rule_rect: pygame.Rect = tmp_rule_image.get_rect()
             tmp_rule_rect.left = self.rules_rect.left + 25
             tmp_rule_rect.top = tmp_rule_y
             self.rules_msg_images_n_rects.append( (tmp_rule_image, tmp_rule_rect))
             tmp_rule_y += tmp_rule_rect.height + 10
 
     def draw(self) -> None:
-        """put the play button and rules object on the screen"""
+        """Stages the play button and rules object for the screen."""
         # the rules
         self.screen.fill(self.settings.rules_box_color, self.rules_rect)
+        rule_obj: tuple
         for rule_obj in self.rules_msg_images_n_rects:
             self.screen.blit(rule_obj[0], rule_obj[1])
 
@@ -68,5 +69,9 @@ class Button:
         self.screen.blit(self.play_msg_image, self.play_msg_image_rect)
 
     def check_clicked(self, mouse_pos) -> bool:
-        """determine if user has clicked button"""
+        """Determines if user has clicked button.
+        
+        Returns:
+            [bool]: True if clicked, False otherwise.
+        """
         return self.play_button_rect.collidepoint(mouse_pos)
