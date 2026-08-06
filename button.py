@@ -19,7 +19,7 @@ import pygame.font
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
-class Button():
+class Button:
     """create and manage button to begin the game"""
 
     def __init__(self, game: 'AlienInvasion') -> None:

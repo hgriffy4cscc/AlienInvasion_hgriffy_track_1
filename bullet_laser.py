@@ -27,6 +27,8 @@ class Laser(Sprite):
         self.rect.midtop = game.ship.rect.midtop
         self.y: int = self.rect.y
 
+        self.cost = self.settings.laser_cost
+
     def update(self) -> None:
         """Updates variables based on game action"""
         self.y -= self.settings.laser_speed

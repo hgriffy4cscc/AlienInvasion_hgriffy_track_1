@@ -121,7 +121,7 @@ class AlienInvasion:
         if laser_alien_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
-            self.game_stats.update(laser_alien_collisions)
+            self.game_stats.update(collisions=laser_alien_collisions)
             self.HUD.update_scores()
 
         # check cannon--alien collisions
@@ -130,7 +130,7 @@ class AlienInvasion:
         if cannon_alien_collisions:
             self.impact_sound.play()
             self.impact_sound.fadeout(500)
-            self.game_stats.update(cannon_alien_collisions)
+            self.game_stats.update(collisions=cannon_alien_collisions)
             self.HUD.update_scores()
 
         # check if all aliens are gone
@@ -149,7 +149,7 @@ class AlienInvasion:
         if laser_spectator_collisions:
             self.spectator_sound.play()
             self.spectator_sound.fadeout(500)
-            self.game_stats.update(laser_spectator_collisions)
+            self.game_stats.update(collisions=laser_spectator_collisions)
             self.HUD.update_scores()
 
         # check cannon-spectator collisions (should not be possible)
@@ -158,7 +158,7 @@ class AlienInvasion:
         if cannon_spectator_collisions:
             self.spectator_sound.play()
             self.spectator_sound.fadeout(500)
-            self.game_stats.update(cannon_spectator_collisions)
+            self.game_stats.update(collisions=cannon_spectator_collisions)
             self.HUD.update_scores()
 
         # check if all spectators are gone

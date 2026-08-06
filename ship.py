@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
     from arsenal import Arsenal
 
-class Ship():
+class Ship:
     """Sprite to represent the ship/playable character."""
 
     def __init__(self, game: 'AlienInvasion', arsenal: 'Arsenal') -> None:

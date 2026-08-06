@@ -64,20 +64,27 @@ class GameStats():
         self.game_level = 1
         self.score = 0
 
-    def update(self, collisions: dict) -> None:
+    def update(self, collisions = None, bullet = None) -> None:
         """Based on game events, update scores (via sub-functions).
         
         Params:
-            collisions: list of sprites involved in collisions to be scored.
+            collisions [dict]: list of sprites involved in collisions to be scored.
+            bullet [Laser | Cannon]: bullet fired in game to be scored
         """
-        # update score
-        self._update_score(collisions)
+        print(f'Score after: {self.score}')
+        # update score if triggerd by collision
+        if collisions:
+            self._update_score_for_collisions(collisions)
+        # update score if triggerd by bullet firing
+        if bullet:
+            self._update_score_for_cost(bullet)
+        print(f'Score after: {self.score}')
         # update max_score
         self._update_max_score()
         # update high_score
         self._update_hi_score()
 
-    def _update_score(self, collisions: dict) -> None:
+    def _update_score_for_collisions(self, collisions: dict) -> None:
         """Update score for current game.
         
         Params:
@@ -88,6 +95,15 @@ class GameStats():
         for other_group in collisions.values():
             for sprite in other_group:
                 self.score += sprite.points
+        # print(f'Score: {self.score}')
+
+    def _update_score_for_cost(self, bullet) -> None:
+        """Update score for current game to reflect cost of ammunition.
+        
+        Params:
+            bullet: sprite representing bullet fired.
+        """
+        self.score -= bullet.cost
         # print(f'Score: {self.score}')
 
     def _update_max_score(self) -> None:

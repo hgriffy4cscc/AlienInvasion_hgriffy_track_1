@@ -64,10 +64,12 @@ class Arsenal:
             if len(self.laser_arsenal) < (self.settings.laser_arsenal_max):
                 new_bullet = Laser(self.game)
                 self.laser_arsenal.add(new_bullet)
+                self.game.game_stats.update(bullet=new_bullet)
                 return True
         elif bullet_type == 'cannon':
             if len(self.cannon_arsenal) < ( self.settings.cannon_arsenal_max ):
                 new_bullet = Cannon(self.game)
                 self.cannon_arsenal.add(new_bullet)
+                self.game.game_stats.update(bullet=new_bullet)
                 return True
         return False

@@ -37,6 +37,8 @@ class Cannon(Sprite):
         self._discern_horizontal_motion()
         self.launch_time: int = pygame.time.get_ticks()
 
+        self.cost = self.settings.cannon_cost
+
 
     def _discern_horizontal_motion(self) -> None:
         """Based on ship motion, determines if cannonball should move horizontally.
