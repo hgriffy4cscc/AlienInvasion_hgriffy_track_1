@@ -1,31 +1,28 @@
-"""keep track of scores and components thereof
-Depends on:
-* settings.py
-* 
+"""Manages keeping + updating scores based on game events."""
 
-Is Depended on:
-* alien_invasion.py
-* 
-
-Properties contain:
-* 
-
-Methods control:
-* 
-"""
+# Python modules
 from pathlib import Path
 import json
-
 from typing import TYPE_CHECKING
-
+# Installed modules
+import pygame
+# Custom/game modules
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
+    from alien_fleet import AlienFleet
+    from alien import Alien
+    from spectator_crowd import SpectatorCrowd
+    from spectator import Spectator
+    from arsenal import Arsenal
+    from bullet_laser import Laser
+    from bullet_cannon import Cannon
+
 
 class GameStats():
-    """manage scores and other statistics about gameplay"""
+    """Manages keeping + updating scores based on game events."""
 
     def __init__(self, game: 'AlienInvasion') -> None:
-        self.game = game
+        self.game: AlienInvasion = game
         self.settings = game.settings
         self.score: int = 0
         self.max_score: int = 0
@@ -34,21 +31,25 @@ class GameStats():
         self.reset_stats()
 
     def init_saved_scores(self) -> None:
-        """update score values from saved file (if saved)"""
+        """Updates score values from saved file (if saved)."""
         self.path: Path = self.settings.scores_file
         if self.path.exists():
             contents: str = self.path.read_text()
             if not contents:
                 contents = '{}'
-            scores = json.loads(contents)
+            scores: dict = json.loads(contents)
             self.hi_score = scores.get('hi_score', 0)
         else:
             self.hi_score = 0
             self.save_scores()
 
     def save_scores(self) -> None:
-        """write non-session scores to file for future retrieval"""
-        scores = {
+        """Writes non-session scores to file for future retrieval.
+        
+        Effects:
+            File created (or exception raised)
+        """
+        scores: dict = {
             'hi_score': self.hi_score
         }
         contents = json.dumps(scores, indent=4)
@@ -58,13 +59,17 @@ class GameStats():
             print(f'File Not Found: {e.filename2}')
 
     def reset_stats(self) -> None:
-        """when game restarted (not launched) reset scores"""
+        """When game restarted (not launched), reset scores accordingly."""
         self.ships_remaining = self.settings.ship_count
         self.game_level = 1
         self.score = 0
 
-    def update(self, collisions) -> None:
-        """based on game events update scores (via sub-functions)"""
+    def update(self, collisions: dict) -> None:
+        """Based on game events, update scores (via sub-functions).
+        
+        Params:
+            collisions: list of sprites involved in collisions to be scored.
+        """
         # update score
         self._update_score(collisions)
         # update max_score
@@ -72,25 +77,31 @@ class GameStats():
         # update high_score
         self._update_hi_score()
 
-    def _update_score(self, collisions) -> None:
-        """update score for current game"""
+    def _update_score(self, collisions: dict) -> None:
+        """Update score for current game.
+        
+        Params:
+            collisions: dictionary of sprites involved in collisions to be scored.
+        """
+        other_group: AlienFleet | SpectatorCrowd
+        sprite: Alien | Spectator
         for other_group in collisions.values():
             for sprite in other_group:
                 self.score += sprite.points
         # print(f'Score: {self.score}')
 
     def _update_max_score(self) -> None:
-        """update the highest score for this session"""
+        """Update the highest score for this session."""
         if self.score > self.max_score:
             self.max_score = self.score
         # print(f'Max: {self.max_score}')
 
     def _update_hi_score(self) -> None:
-        """update the all-time highest score"""
+        """Update the all-time highest score."""
         if self.score > self.hi_score:
             self.hi_score = self.score
 
     def update_level(self) -> None:
-        """when level completed update"""
+        """Update indicator that level completed."""
         self.game_level += 1
         # print(f'Level: {self.game_level}')
